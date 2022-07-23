@@ -1,0 +1,13 @@
+@font-face {
+    font-family: "MyWebFont";
+    font-weight: 600;
+    src: url("GemunuLibre-VariableFont_wght.ttf") format("woff2");
+  }
+  
+
+.hello {
+    color: red;
+    font-family: "MyWebFont";
+    font-size: xx-large;
+    background: url('./icon.jpg');
+  }
