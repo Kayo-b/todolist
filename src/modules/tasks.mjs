@@ -16,5 +16,5 @@ export default function newTask(name, note, date, level, status) {
         __proto__: protoMethods
         
     }
-    return {name,note,dueDate}
+    return {name,note}
 }
