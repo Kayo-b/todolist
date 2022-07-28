@@ -1,4 +1,4 @@
-import newTask from "./tasks.mjs"
+// import newTask from "./tasks.mjs"
 import createProject from "./projects.mjs"
 
 
@@ -10,19 +10,19 @@ export default class TodoList {
 
     }
 
-    getProject() {
+    static getProjects() {
         return this.projects
     }
     
-    addProject(name) {
+    static addProject(name) {
         this.projects.push(createProject(name))
     }
 
-    deleteProject(index) {
+    static deleteProject(index) {
         this.projects.splice(index, 1)
     }
 
-    clearProjects(){
+    static clearProjects(){
         this.projects = []
     }
 
@@ -30,6 +30,7 @@ export default class TodoList {
 
 
 // TodoList.addProject("TESTEEEE")
+// TodoList.getProjects()
 
 // var test = new TodoList()
 // console.log(test.projects)

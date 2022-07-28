@@ -1,16 +1,17 @@
-// export function teste(project) {
-//     return console.log(project)
-// }
-// import newTask from "./tasks.mjs"
+import { compareAsc, format, formatDistance, subDays} from 'date-fns';
+import newTask from "./tasks.mjs";
+
+const today = format(new Date(), 'dd/MM/yyyy HH:mm:ss')
 
 export default function createProject(name, desc) {
     let protoMethods = {
-        editName(input){project.name = input},
+        setName(input){project.name = input},
         getName(){return project.name},
-        editDesc(input){project.description = input},
-        createTask(newTask){project.tasks.push(newTask)},
+        setDesc(input){project.description = input},
+        setTask(taskName){project.tasks.push(newTask(taskName))},
         deleteTask(taskIndex){project.tasks.splice(taskIndex,1)},
-        deleteAllTasks(){project.tasks = []} 
+        deleteAllTasks(){project.tasks = []},
+        isToday(task){if(task.dueDate == today){project[0].push(task)}}
     }
     let project = {
         name: name,
@@ -21,6 +22,9 @@ export default function createProject(name, desc) {
     }
     return project
 }
-// var newproj = createProject("teste", "teste desc")
-// newproj.createTask(newTask("Task Name", "This is a task note", "DATE"))
-// console.log(newproj.getName())
+
+
+
+
+
+

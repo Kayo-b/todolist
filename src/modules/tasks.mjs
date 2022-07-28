@@ -1,11 +1,11 @@
 export default function newTask(name, note, date, level, status) {
 
     let protoMethods = {
-        editName(input){task.name = input},
+        setName(input){task.name = input},
         getName(){return task.name},
-        editNote(input){task.note = input},
-        editDate(input){task.dueDate = input},
-        editPriority(input){task.priority = input}
+        setNote(input){task.note = input},
+        setDate(input){task.dueDate = input},
+        setPriority(input){task.priority = input}
     }
     var task = {
         name: name,
@@ -16,5 +16,5 @@ export default function newTask(name, note, date, level, status) {
         __proto__: protoMethods
         
     }
-    return {name,note}
+    return task;
 }
