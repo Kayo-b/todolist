@@ -4,33 +4,45 @@ import createProject from "./projects.mjs"
 
 export default class TodoList {
     constructor() {
-        this.projects = []
-        this.projects.push(createProject("Today"))
-        // this.addProject = (name) => projects.push(createProject(name))
+        this.projects = [];
+        this.projects.push(createProject("Today"));
 
     }
 
-    static getProjects() {
-        return this.projects
+    getProjects() {
+        return this.projects;
     }
     
-    static addProject(name) {
-        this.projects.push(createProject(name))
+    addProject(projFactory) {
+        this.projects.push(projFactory);
     }
 
-    static deleteProject(index) {
-        this.projects.splice(index, 1)
+    deleteProject(index) {
+        this.projects.splice(index, 1);
     }
 
-    static clearProjects(){
-        this.projects = []
+    clearProjects() {
+        this.projects = [];
+    }
+
+    todayTask() {
+        for(let x = 0; x < this.projects.length; x++) {
+            for(let y = 0; y < this.projects[x].todayArr.length; y++) {              
+                this.projects[0].tasks.push(this.projects[x].todayArr[y])
+            }
+            }
+             
     }
 
 }
 
 
-// TodoList.addProject("TESTEEEE")
-// TodoList.getProjects()
+var test = new TodoList
+test.addProject(createProject("NAME!", "DESC#"));
+var newProj = test.projects[1]
+newProj.setTask("nameTask", "04/08/2022")
+newProj.setTask("nameTask-2", "04/08/2022")
+newProj.isToday()
+test.todayTask()
+console.log(test.projects[0].tasks)
 
-// var test = new TodoList()
-// console.log(test.projects)

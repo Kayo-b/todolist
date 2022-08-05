@@ -19,7 +19,6 @@ export default function newTask(name, date, note, level, status) {
         priority: level,
         status: status,
         __proto__: protoMethods()
-        
     }
     return task;
 }
