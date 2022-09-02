@@ -11,3 +11,56 @@
     font-size: xx-large;
     background: url('./icon.jpg');
   }
+
+
+.header {
+  align-items: center;;
+}
+
+#mainContainer>#nav{
+  height: 100%;
+  width: auto;
+  display:flex;
+  border: 1px solid red;
+  /* align-items: center; */
+  justify-content:start;
+  flex-direction: row;
+}
+
+#projects, #tasks-menu {
+  border: 1px solid green;
+  height:800px;
+  width:400px;
+  border-radius:5px;
+  align-items: center;
+  text-align: center;
+  display:flex;
+  flex-direction:column;
+  justify-content: space-between;
+}
+
+h3 {
+  margin:0px;
+  padding:0px;
+}
+
+#projList, #tasksList {
+  display: flex;
+  height:800px;
+  width:400px;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+#projname{
+  font-size:14pt;
+  height:25px
+}
+
+#okButton {
+  margin:5px;
+  font-size:12pt;
+  height:30px;
+  width:30px;
+}

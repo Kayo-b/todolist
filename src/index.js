@@ -3,6 +3,7 @@ import './style.css';
 import Icon from './icon.jpg';
 import Data from './data.xml';
 import Notes from './data.csv';
+import DOM from './modules/UI.mjs';
 
 function component() {
     const element = document.createElement('div');
@@ -22,6 +23,9 @@ function component() {
     console.log(Data);
 
     console.log(Notes);
+
+    DOM.newProject()
+  
 
     return element;
   }

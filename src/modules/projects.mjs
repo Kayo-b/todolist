@@ -26,10 +26,6 @@ export default function createProject(name, desc) {
         description: desc,
         tasks: [],
         todayArr:[],
-        // isToday() {
-        //     for(let x = 0; x < this.tasks.length; x++) { 
-        //         if(this.tasks[x].dueDate === today) {
-        //             this.todayArr.push(this.tasks[x])}}},
         __proto__: protoMethods()
 
     }
