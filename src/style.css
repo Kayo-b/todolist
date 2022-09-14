@@ -27,7 +27,7 @@
   flex-direction: row;
 }
 
-#projects, #tasks-menu {
+#projectsDiv, #tasks-menu {
   border: 1px solid green;
   height:800px;
   width:400px;
@@ -53,12 +53,12 @@ h3 {
 
 }
 
-#projname{
+#projname, #taskname{
   font-size:14pt;
   height:25px
 }
 
-#okButton {
+#okButton, #addTaskButton {
   margin:5px;
   font-size:12pt;
   height:30px;

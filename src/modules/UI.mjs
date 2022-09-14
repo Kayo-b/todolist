@@ -1,16 +1,26 @@
-// var test = new TodoList()
-// test.addProject()
-// console.log(test.getProjects())
-// var newProj = test.getProjects()[0]
-// newProj.setName("testeNameEdit")
-// newProj.setTask("This is a new task", "task note")
-// var newTask = newProj.tasks[0]
-// newTask.setName("new name")
-// console.log(newTask.getName())
 import TodoList from "./todolist.mjs";
+import createProject from "./projects.mjs";
 import Storage from "./storage.mjs"
+import { create } from "lodash";
 
 export default class DOM {
+
+    //Content Loader
+
+    static loadContent() {
+        DOM.newProject();
+        DOM.createProjObject();
+        DOM.loadTodoList();
+    }
+
+    static loadTodoList() {
+        let todoList = Storage.getTodoList()
+        todoList = todoList.projects
+        console.log(todoList)
+        let projectsList = document.getElementById("projList");
+        let showNameFunc = (item) => projectsList.innerHTML += `  <div id="${item.name}" class="projListingClass">${item.name}</div>`
+        todoList.forEach(showNameFunc)
+    }
     
     //Create Content
 
@@ -22,46 +32,80 @@ export default class DOM {
           </div>`
     }
 
-    static projectsList() {
+    static projectsNameInput() {
         let projectsList = document.getElementById("projList");
-        projectsList.innerHTML += `<div id="listElement">
+        projectsList.innerHTML += `<div id="inputElement">
         <input type="text" id="projname" placeholder="Project Name">
         <input type="submit" id="okButton" value="Ok"></div>`
 
         DOM.confirmNewProj();
+        DOM.hideButton("addproject", "yes")
     }
 
+    static projectName(name) {
+        let projectsList = document.getElementById("projList");
+        projectsList.innerHTML += `<div id="${name}" class="projListingClass">${name}</div>`
+        
+    }
+
+
+    static tasksList() {
+        let tasksList = document.getElementById("tasksList");
+        tasksList.innerHTML += `<div id="tasksElement"> 
+        <input type="text" id="taskname" placeholder="Task Name">
+        <input type="submit" id="addTaskButton" value="Add"></div>`
+    }
+
+    static showProjNameInTaskList(projName) {
+        let projNameTaskList = document.getElementById("projNameTaskList");
+        projNameTaskList.innerText = `${projName} Tasks`
+    }
    
+    static removeDiv(value) {
+
+        let target = document.getElementById(value);
+        target.remove()
+
+    }
+
+    static hideButton(targetId, hide) {
+        let target = document.getElementById(targetId);
+        
+        if(hide == "yes"){
+           target.style.display = "none"
+        }
+        else if(hide == "no") {
+            target.style.display = "block"
+        }
+
+
+    }
     // Event Listeners
 
     static newProject() {
+        
         var addProjButton = document.getElementById("addproject");
-        addProjButton.addEventListener("click", DOM.projectsList)
+        addProjButton.addEventListener("click", DOM.projectsNameInput);
 
     }
 
     static createProjObject() {
         let projName = document.getElementById("projname").value;
-        console.log(projName)
-        
-    }
 
+        if(projName == "") return alert("Please inform the project's name");
+        Storage.addProject(projName)
+        var name = Storage.getTodoList()
+        // var nameProject = Object.assign(createProject(), name.projects[1])
+        // nameProject.setName("setNameTeste")
+        // Storage.addProject(nameProject)
+        DOM.hideButton("addproject", "no")
+        DOM.removeDiv("inputElement")
+        DOM.showProjNameInTaskList(projName)
+        DOM.projectName(projName);
+        DOM.tasksList();      
+    }
     static confirmNewProj() {
         let okButton = document.getElementById("okButton");
-        okButton.addEventListener("click", DOM.createProjObject)
+        okButton.addEventListener("click", DOM.createProjObject);  
     }
-
-    // static clickOnProject() {
-    //     var addProjButton = document.getElementById("addproject");
-    //     addProjButton.addEventListener("click", DOM.projectsList)
-    // }
-    
 }
-// var newTodo = new TodoList
-// newTodo.addProject("TESTEEEE","description")
-// console.log(newTodo.getProjects())
-
-
-// var teste = new TodoList()
-// teste.addProject("testeeee")
-// console.log(teste.getProjects())

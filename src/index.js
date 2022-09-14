@@ -24,10 +24,10 @@ function component() {
 
     console.log(Notes);
 
-    DOM.newProject()
-  
+    var loadContent = DOM.loadTodoList();
+    DOM.loadContent()
 
-    return element;
+    return loadContent;
   }
   
-  document.body.appendChild(component());
+  component();

@@ -5,7 +5,7 @@ import createProject from "./projects.mjs"
 export default class TodoList {
     constructor() {
         this.projects = [];
-        this.projects.push(createProject("Today"));
+        this.projects.push(createProject("Today","desc teste"));
 
     }
 
@@ -14,8 +14,7 @@ export default class TodoList {
     }
     
     addProject(project) {
-        // this.projects.push(createProject(name,desc));
-        this.projects.push(project)
+        this.projects.push(createProject(project));
     }
 
     deleteProject(index) {
@@ -38,13 +37,13 @@ export default class TodoList {
 }
 
 
-var test = new TodoList
-test.addProject(createProject("NAME!", "DESC#"));
-var newProj = test.projects[1]
-newProj.setTask("nameTask", "07/08/2022")
-newProj.setTask("nameTask-2", "07/08/2022")
-newProj.isToday()
-test.todayTask()
-console.log(test.projects[1])
-console.log(test.projects[0].tasks)
+// var test = new TodoList
+// test.addProject(createProject("NAME!", "DESC#"));
+// var newProj = test.projects[1]
+// newProj.setTask("nameTask", "07/08/2022")
+// newProj.setTask("nameTask-2", "07/08/2022")
+// newProj.isToday()
+// test.todayTask()
+// console.log(test.projects[1])
+// console.log(test.projects[0].tasks)
 

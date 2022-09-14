@@ -26,6 +26,7 @@ export default function createProject(name, desc) {
         description: desc,
         tasks: [],
         todayArr:[],
+        methodTest(input){console.log("method test" + `${input}`)},
         __proto__: protoMethods()
 
     }
