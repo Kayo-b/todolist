@@ -8,9 +8,11 @@ export default class DOM {
     //Content Loader
 
     static loadContent() {
+        DOM.editProject();
         DOM.newProject();
         DOM.createProjObject();
         DOM.loadTodoList();
+        
     }
 
     static loadTodoList() {
@@ -18,7 +20,9 @@ export default class DOM {
         todoList = todoList.projects
         console.log(todoList)
         let projectsList = document.getElementById("projList");
-        let showNameFunc = (item) => projectsList.innerHTML += `  <div id="${item.name}" class="projListingClass">${item.name}</div>`
+        let showNameFunc = (item) => projectsList.innerHTML += `
+        <div id="${item.name}" class="projListingClass">${item.name}
+        <button id="${item.name}edit" class="editButton">Edit</button></div>`
         todoList.forEach(showNameFunc)
     }
     
@@ -44,7 +48,8 @@ export default class DOM {
 
     static projectName(name) {
         let projectsList = document.getElementById("projList");
-        projectsList.innerHTML += `<div id="${name}" class="projListingClass">${name}</div>`
+        projectsList.innerHTML += `<div id="${name}" class="projListingClass">${name} 
+        <button ="${name}edit" class="editButton">Edit</button></div>`
         
     }
 
@@ -103,9 +108,31 @@ export default class DOM {
         DOM.showProjNameInTaskList(projName)
         DOM.projectName(projName);
         DOM.tasksList();      
+        console.log("TESTE LOAD CONTENT")
     }
+
     static confirmNewProj() {
         let okButton = document.getElementById("okButton");
         okButton.addEventListener("click", DOM.createProjObject);  
+    }
+
+    static editProject() {
+        // var getProjName = document.getElementById(projName)
+
+        var getTodoList = Storage.getTodoList()
+        var nameProject = Object.assign(createProject(), getTodoList.projects)
+        // let testbutton = document.getElementById("projList");
+        // testbutton = testbutton.children
+        // let getClassNameFunc = (e) => {
+        //     var targetClass = e.target.class
+        //     console.log(targetClass)
+        // }
+
+        document.addEventListener("click", (e) => {
+            if(e.target.className == "editButton"){
+                var targetClass = e.target.parentNode.id
+                 console.log(targetClass)}})
+
+        console.log("TESTE LOAD CONTENT")
     }
 }
