@@ -17,6 +17,10 @@ export default class TodoList {
         this.projects.push(createProject(project));
     }
 
+    editProject(project) {
+        this.projects.splice()
+    }
+
     deleteProject(index) {
         this.projects.splice(index, 1);
     }

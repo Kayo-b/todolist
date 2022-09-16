@@ -8,10 +8,11 @@ export default class DOM {
     //Content Loader
 
     static loadContent() {
-        DOM.editProject();
         DOM.newProject();
+        DOM.getTargetId();
         DOM.createProjObject();
         DOM.loadTodoList();
+        
         
     }
 
@@ -85,6 +86,16 @@ export default class DOM {
 
 
     }
+
+    static inputField(targetId) {
+        let projectsList = document.getElementById(`${targetId}`);
+        projectsList.innerHTML = `<div id="inputElement">
+        <input type="text" id="${targetId}" placeholder="Project Name" value="${targetId}">
+        <input type="submit" id="okEditButton" value="Ok"></div>`;
+        console.log("#2")
+        DOM.confirmUpdateProj(targetId)
+
+    }
     // Event Listeners
 
     static newProject() {
@@ -96,19 +107,14 @@ export default class DOM {
 
     static createProjObject() {
         let projName = document.getElementById("projname").value;
-
         if(projName == "") return alert("Please inform the project's name");
         Storage.addProject(projName)
-        var name = Storage.getTodoList()
-        // var nameProject = Object.assign(createProject(), name.projects[1])
-        // nameProject.setName("setNameTeste")
-        // Storage.addProject(nameProject)
         DOM.hideButton("addproject", "no")
         DOM.removeDiv("inputElement")
         DOM.showProjNameInTaskList(projName)
         DOM.projectName(projName);
         DOM.tasksList();      
-        console.log("TESTE LOAD CONTENT")
+
     }
 
     static confirmNewProj() {
@@ -116,23 +122,41 @@ export default class DOM {
         okButton.addEventListener("click", DOM.createProjObject);  
     }
 
-    static editProject() {
-        // var getProjName = document.getElementById(projName)
-
+    static editProject(targetId, newName) {
         var getTodoList = Storage.getTodoList()
-        var nameProject = Object.assign(createProject(), getTodoList.projects)
-        // let testbutton = document.getElementById("projList");
-        // testbutton = testbutton.children
-        // let getClassNameFunc = (e) => {
-        //     var targetClass = e.target.class
-        //     console.log(targetClass)
-        // }
-
-        document.addEventListener("click", (e) => {
-            if(e.target.className == "editButton"){
-                var targetClass = e.target.parentNode.id
-                 console.log(targetClass)}})
-
-        console.log("TESTE LOAD CONTENT")
+        var indexOfTargetId = getTodoList.projects.map(x => x.name).indexOf(`${targetId}`)
+        var newObjProj = Object.assign(createProject(), getTodoList.projects[indexOfTargetId])
+        newObjProj.setName(newName)
+        getTodoList.projects.splice(indexOfTargetId, 1, newObjProj)
+        console.log("#4")
+        Storage.saveTodoList(getTodoList)
+        
     }
+
+
+    static confirmUpdateProj(oldValue) {
+        var okEditButton = document.getElementById("okEditButton");
+        var newValue = () => {
+            var newValue = okEditButton.previousElementSibling.value;
+            console.log(newValue);
+            return newValue}
+        console.log("#3");
+        okEditButton.addEventListener("click", function() { DOM.editProject(oldValue, newValue())});
+        //okEditButton.addEventListener("click", function() {DOM.editProject(oldValue, newValue), console.log(newValue, oldValue)});
+          
+    }
+
+
+    static getTargetId() {
+        document.addEventListener("click", (e) => {
+            if(e.target.className != "editButton") return
+
+            let targetId = e.target.parentNode.id
+            console.log("#1")
+            DOM.inputField(targetId)})
+            // DOM.editProject(targetId)})
+
+    }
+
+
 }
