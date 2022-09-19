@@ -16,10 +16,10 @@ export default class DOM {
         
     }
 
+    /*Gets todoList from localStorage and renders it on the page */
     static loadTodoList() {
         let todoList = Storage.getTodoList()
         todoList = todoList.projects
-        console.log(todoList)
         let projectsList = document.getElementById("projList");
         let showNameFunc = (item) => projectsList.innerHTML += `
         <div id="${item.name}" class="projListingClass">${item.name}
@@ -41,7 +41,8 @@ export default class DOM {
         let projectsList = document.getElementById("projList");
         projectsList.innerHTML += `<div id="inputElement">
         <input type="text" id="projname" placeholder="Project Name">
-        <input type="submit" id="okButton" value="Ok"></div>`
+        <input type="submit" id="okButton" value="Ok">
+        <input type="submit" id="cancelButton" value="Cancel"></div>`
 
         DOM.confirmNewProj();
         DOM.hideButton("addproject", "yes")
@@ -53,7 +54,6 @@ export default class DOM {
         <button ="${name}edit" class="editButton">Edit</button></div>`
         
     }
-
 
     static tasksList() {
         let tasksList = document.getElementById("tasksList");
@@ -74,6 +74,14 @@ export default class DOM {
 
     }
 
+    static removeInnerHTML(value) {
+
+        let target = document.getElementById(value);
+        target.innerHTML = ""
+
+    }
+
+
     static hideButton(targetId, hide) {
         let target = document.getElementById(targetId);
         
@@ -91,9 +99,10 @@ export default class DOM {
         let projectsList = document.getElementById(`${targetId}`);
         projectsList.innerHTML = `<div id="inputElement">
         <input type="text" id="${targetId}" placeholder="Project Name" value="${targetId}">
-        <input type="submit" id="okEditButton" value="Ok"></div>`;
-        console.log("#2")
+        <input type="submit" id="okEditButton" value="Ok">
+        <input type="submit" id="delButton" value="Delete"></div>`;
         DOM.confirmUpdateProj(targetId)
+        DOM.deleteProject();
 
     }
     // Event Listeners
@@ -108,6 +117,7 @@ export default class DOM {
     static createProjObject() {
         let projName = document.getElementById("projname").value;
         if(projName == "") return alert("Please inform the project's name");
+
         Storage.addProject(projName)
         DOM.hideButton("addproject", "no")
         DOM.removeDiv("inputElement")
@@ -122,39 +132,51 @@ export default class DOM {
         okButton.addEventListener("click", DOM.createProjObject);  
     }
 
+    static getIndexOfProject(projID) {
+        var getTodoList = Storage.getTodoList();
+        var indexOfTargetId = getTodoList.projects.map(x => x.name).indexOf(`${projID}`);
+        return indexOfTargetId;
+    }
+
+    /*Receives new and old inputs, finds out old input index and  */
     static editProject(targetId, newName) {
         var getTodoList = Storage.getTodoList()
-        var indexOfTargetId = getTodoList.projects.map(x => x.name).indexOf(`${targetId}`)
+        var indexOfTargetId = DOM.getIndexOfProject(targetId)
         var newObjProj = Object.assign(createProject(), getTodoList.projects[indexOfTargetId])
         newObjProj.setName(newName)
         getTodoList.projects.splice(indexOfTargetId, 1, newObjProj)
-        console.log("#4")
-        Storage.saveTodoList(getTodoList)
+        DOM.removeInnerHTML("projList")
+        DOM.showProjNameInTaskList(newName)
+        Storage.saveTodoList(getTodoList);
+        DOM.loadTodoList();
         
     }
 
-
+    /*Reads the new input value and sends it with the old input value to editProject function*/
     static confirmUpdateProj(oldValue) {
         var okEditButton = document.getElementById("okEditButton");
         var newValue = () => {
             var newValue = okEditButton.previousElementSibling.value;
             console.log(newValue);
             return newValue}
-        console.log("#3");
         okEditButton.addEventListener("click", function() { DOM.editProject(oldValue, newValue())});
-        //okEditButton.addEventListener("click", function() {DOM.editProject(oldValue, newValue), console.log(newValue, oldValue)});
           
     }
 
+    static deleteProject() {
+        var deleteButton = document.getElementById("delButton");
+        deleteButton.addEventListener("click", () => console.log("testeDelete"))
+    }
 
+    /*Gets button parent node ID and sends it to inputField where the input field
+    is created in the correct location */
     static getTargetId() {
         document.addEventListener("click", (e) => {
             if(e.target.className != "editButton") return
 
             let targetId = e.target.parentNode.id
-            console.log("#1")
-            DOM.inputField(targetId)})
-            // DOM.editProject(targetId)})
+
+            DOM.inputField(targetId)});
 
     }
 
