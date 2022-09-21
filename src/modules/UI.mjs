@@ -8,10 +8,12 @@ export default class DOM {
     //Content Loader
 
     static loadContent() {
+        DOM.selectProjOnClick();
         DOM.newProject();
         DOM.getTargetId();
         DOM.createProjObject();
         DOM.loadTodoList();
+
         
         
     }
@@ -99,10 +101,9 @@ export default class DOM {
         let projectsList = document.getElementById(`${targetId}`);
         projectsList.innerHTML = `<div id="inputElement">
         <input type="text" id="${targetId}" placeholder="Project Name" value="${targetId}">
-        <input type="submit" id="okEditButton" value="Ok">
-        <input type="submit" id="delButton" value="Delete"></div>`;
+        <input type="submit" id="okEditButton" value="Save">
+        <input type="submit" id="delButtonTeste" value="Delete"></div>`;
         DOM.confirmUpdateProj(targetId)
-        DOM.deleteProject();
 
     }
     // Event Listeners
@@ -144,7 +145,7 @@ export default class DOM {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
         var newObjProj = Object.assign(createProject(), getTodoList.projects[indexOfTargetId])
         newObjProj.setName(newName)
-        getTodoList.projects.splice(indexOfTargetId, 1, newObjProj)
+        getTodoList.projects.splice(indexOfTargetId, 1, newObjProj);
         DOM.removeInnerHTML("projList")
         DOM.showProjNameInTaskList(newName)
         Storage.saveTodoList(getTodoList);
@@ -155,17 +156,51 @@ export default class DOM {
     /*Reads the new input value and sends it with the old input value to editProject function*/
     static confirmUpdateProj(oldValue) {
         var okEditButton = document.getElementById("okEditButton");
-        var newValue = () => {
-            var newValue = okEditButton.previousElementSibling.value;
-            console.log(newValue);
-            return newValue}
+        let newValue = DOM.returnPrevElemSiblingValue(okEditButton)
+        // var newValue = () => {
+        //     var newValue = okEditButton.previousElementSibling.value;
+        //     console.log(newValue);
+        //     return newValue}
+        DOM.deleteProjectButton();  
         okEditButton.addEventListener("click", function() { DOM.editProject(oldValue, newValue())});
-          
     }
 
-    static deleteProject() {
-        var deleteButton = document.getElementById("delButton");
-        deleteButton.addEventListener("click", () => console.log("testeDelete"))
+    static returnPrevElemSiblingValue(elemId) {
+        // let elementID = document.getElementById(`${elemId}`)
+        let getValue = () => {
+            let returnValue = elemId.previousElementSibling.value;
+            return returnValue
+        }
+
+        return getValue
+    }
+
+    static returnPrevElemSiblingId(elemId) {
+        // let elementID = document.getElementById(`${elemId}`)
+        let getValue = () => {
+            let returnValue = elemId.previousElementSibling.id;
+            return returnValue
+        }
+
+        return getValue
+    }
+
+    static deleteProjectObj(projId) {
+        var projIndex = DOM.getIndexOfProject(projId)
+        console.log(projIndex)
+        Storage.deleteProject(projIndex)
+        DOM.removeInnerHTML("projList")
+        DOM.loadTodoList()
+    }
+
+    static deleteProjectButton() {
+        var deleteButtonTeste = document.getElementById("delButtonTeste");
+        var siblingId = DOM.returnPrevElemSiblingId(deleteButtonTeste);
+        var delButSibling = document.getElementById(siblingId())
+        var siblingId2 = DOM.returnPrevElemSiblingId(delButSibling)
+        // var clickFunction = DOM.deleteProjectObj(siblingId2())
+
+        deleteButtonTeste.addEventListener("click", function(){DOM.deleteProjectObj(siblingId2())})
     }
 
     /*Gets button parent node ID and sends it to inputField where the input field
@@ -180,5 +215,22 @@ export default class DOM {
 
     }
 
+    static selectProjOnClick() {
+        // var projListClass = document.querySelectorAll(".projListingClass")
+        document.addEventListener("click", (e) => {
+            if(e.target.className != "projListingClass") return
+            DOM.showProjNameInTaskList(`${e.target.id}`)
+            //ADD SHOW TASKS LIST
+            });
+    }
+
+    static addTaskButton() {
+        var taskInputButton = document.getElementById("addTaskButton");
+        var inputValue = DOM.returnPrevElemSiblingValue(taskInputButton);
+        // var inputTaskValue = () => {
+        //     var inputValue = taskInputButton.previousElementSibling.value;
+        //     return inputValue};
+        taskInputButton.addEventListener("click", () => console.log(inputValue));
+    }
 
 }
