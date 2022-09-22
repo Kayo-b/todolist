@@ -8,7 +8,6 @@ export default class DOM {
     //Content Loader
 
     static loadContent() {
-        DOM.selectProjOnClick();
         DOM.newProject();
         DOM.getTargetId();
         DOM.createProjObject();
@@ -27,6 +26,7 @@ export default class DOM {
         <div id="${item.name}" class="projListingClass">${item.name}
         <button id="${item.name}edit" class="editButton">Edit</button></div>`
         todoList.forEach(showNameFunc)
+        DOM.selectProjOnClick();
     }
     
     //Create Content
