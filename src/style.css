@@ -21,17 +21,27 @@
   height: 100%;
   width: auto;
   display:flex;
-  border: 1px solid red;
+  border: 1px solid rgb(16, 82, 130);
   /* align-items: center; */
   justify-content:start;
   flex-direction: row;
 }
 
-#projectsDiv, #tasks-menu {
-  border: 1px solid green;
+#tasks-menu {
   height:800px;
   width:400px;
   border-radius:5px;
+  align-items: center;
+  text-align: center;
+  display:flex;
+  flex-direction:column;
+  justify-content: space-between;
+}
+
+#projectsDiv {
+  border-right: 1px solid rgb(16, 82, 130);
+  height:800px;
+  width:400px;
   align-items: center;
   text-align: center;
   display:flex;

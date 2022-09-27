@@ -22,7 +22,11 @@ export default class Storage {
         Storage.saveTodoList(todoList)
     }
 
-    static getProjects() {
+    static addTask(projIndex, name) {
+        const todoList = Storage.getTodoList();
+        var projTest = todoList.projects[projIndex]
+        projTest.setTask(name)
+        Storage.saveTodoList(todoList)
 
     }
 
