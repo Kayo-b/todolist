@@ -2,6 +2,7 @@ import TodoList from "./todolist.mjs";
 import createProject from "./projects.mjs";
 import Storage from "./storage.mjs"
 import { create } from "lodash";
+import { compareAsc, format, formatDistance, subDays} from 'date-fns';
 
 export default class DOM {
 
@@ -12,9 +13,6 @@ export default class DOM {
         DOM.getTargetId();
         DOM.createProjObject();
         DOM.loadTodoList();
-
-        
-        
     }
 
     /*Gets todoList from localStorage and renders it on the page */
@@ -63,7 +61,7 @@ export default class DOM {
         let taskInput = document.getElementById("tasksList");
         taskInput.innerHTML += `<div id="tasksInputField"> 
         <input type="text" id="taskname" placeholder="Task Name">
-        <input type="submit" id="addTaskButton" value="Add"></div>`
+        <input type="submit" id="addTaskButton123" value="Add"></div>`
     }
 
     static showProjNameInTaskList(projName) {
@@ -153,21 +151,40 @@ export default class DOM {
         DOM.loadTodoList();
         
     }
+
+//-----START-------// OBJECT HANDLING FUNCTIONS //-------START--------//
+
     /*Receives project id(object) and assigns object from module that contains all the necessary methods(proto methods)*/
     static assignMethodsToProjectObj(projectID) {
         var getTodoList = Storage.getTodoList()
-        var indexOfTargetId = DOM.getIndexOfProject(projectID)
-        var newObject = Object.assign(createProject(), getTodoList.projects[indexOfTargetId])
+        var indexOfObject = DOM.getIndexOfProject(projectID)
+        var newObject = Object.assign(createProject(), getTodoList.projects[indexOfObject])
         // Storage.saveTodoList(getTodoList);
         return newObject
     }
 
+    //Removes old object and adds new object to the same position
     static substituteProjectFromTodoList(oldProjIndex, newProj) {
         var getTodoList = Storage.getTodoList()
         getTodoList.projects.splice(oldProjIndex, 1, newProj);
         Storage.saveTodoList(getTodoList);
     }
 
+
+//------END------// OBJECT HANDLING FUNCTIONS //--------END-------//
+
+
+    static addTask(objId, taskName) {
+        var newObj = DOM.assignMethodsToProjectObj(objId);
+        const today = format(new Date(), 'dd/MM/yyyy')
+        newObj.setTask(taskName, today)
+        newObj.isToday();
+        var indexOfTargetId = DOM.getIndexOfProject(objId)
+        DOM.substituteProjectFromTodoList(indexOfTargetId, newObj)
+        // var getTodoList = Storage.getTodoList()
+        // Storage.saveTodoList(getTodoList);
+
+    }
     /*Reads the new input value and sends it with the old input value to editProject function*/
     static confirmUpdateProj(oldValue) {
         var okEditButton = document.getElementById("okEditButton");
@@ -188,6 +205,16 @@ export default class DOM {
     static returnPrevElemSiblingId(elemId) {
         let getValue = () => {
             let returnValue = elemId.previousElementSibling.id;
+            return returnValue
+        }
+
+        return getValue
+    }
+
+    static returnParentNodeValue(elemId) {
+        let getValue = function() {
+            var getElement = document.getElementById(elemId)
+            let returnValue = getElement.parentNode.innerText;
             return returnValue
         }
 
@@ -235,12 +262,14 @@ export default class DOM {
     }
 
     static addTaskButton() {
-        var taskInputButton = document.getElementById("addTaskButton");
+        var taskInputButton = document.getElementById("addTaskButton123");
         var inputValue = DOM.returnPrevElemSiblingValue(taskInputButton);
+        var projectName = DOM.returnParentNodeValue("tasksInputField")
+        
         // var inputTaskValue = () => {
         //     var inputValue = taskInputButton.previousElementSibling.value;
         //     return inputValue};
-        taskInputButton.addEventListener("click", () => Storage.addTask(0,"taskNameTest"));
+        taskInputButton.addEventListener("click", function() {DOM.addTask(projectName(),inputValue())});
     }
 
 }

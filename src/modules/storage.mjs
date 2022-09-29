@@ -4,7 +4,8 @@ import TodoList from "./todolist.mjs";
 
 export default class Storage {
     static saveTodoList(data) {
-        localStorage.setItem('todoList', JSON.stringify(data))
+        localStorage.setItem('todoList', JSON.stringify(data));
+        
     }
 
     static getTodoList() {
