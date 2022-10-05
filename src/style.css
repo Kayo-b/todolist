@@ -27,18 +27,23 @@
   flex-direction: row;
 }
 
-#tasks-menu {
-  height:800px;
+#tasks-menu, #projList {
+  border-top: 1px solid rgb(16, 82, 130);
   width:400px;
-  border-radius:5px;
   align-items: center;
   text-align: center;
   display:flex;
   flex-direction:column;
-  justify-content: space-between;
+  justify-content: start;
 }
 
-#projectsDiv {
+#tasksInputField {
+  display: flex;
+  flex-direction: column;
+  justify-content:start;
+}
+
+#projectsDiv, #tasksList {
   border-right: 1px solid rgb(16, 82, 130);
   height:800px;
   width:400px;
@@ -46,14 +51,14 @@
   text-align: center;
   display:flex;
   flex-direction:column;
-  justify-content: space-between;
+  justify-content: start;
 }
 
 h3 {
   margin:0px;
   padding:0px;
 }
-
+/* 
 #projList, #tasksList {
   display: flex;
   height:800px;
@@ -61,7 +66,7 @@ h3 {
   flex-direction: column;
   align-items: center;
 
-}
+} */
 
 #projname, #taskname{
   font-size:14pt;
