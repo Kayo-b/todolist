@@ -6,7 +6,8 @@ function protoMethods(){
         getName(){return this.name},
         setNote(input){this.note = input},
         setDate(input){this.dueDate = input},
-        setPriority(input){this.priority = input}
+        setPriority(input){this.priority = input},
+        setStatus(input){this.status = input}
     }
     return protoMethods
 }

@@ -34,9 +34,10 @@ export default class DOM {
         let projectTasks = todoList[projIndex].tasks;
         let tasksMenu = document.getElementById("tasks-menu");
         let showTasks = (item) => tasksMenu.innerHTML += `
-        <div id="${item.name}" class="taskListing">${item.name}
+        <div><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
         <button id="${item.name}edit" class="taskEditButton">Edit</button></div>`
-        projectTasks.forEach(showTasks)
+        // DOM.removeInnerHTML(tasksMenu);
+        projectTasks.forEach(showTasks);
 
     }
     
@@ -142,6 +143,7 @@ export default class DOM {
         DOM.showProjNameInTaskList(`${projName}`);
         DOM.taskInput(projName);   
         DOM.addTaskButton();
+        DOM.loadTaskList(projName);
 
     }
 
@@ -167,6 +169,7 @@ export default class DOM {
         
     }
 
+    //Action that occurs after the "Add" button is pressed
     static addTask(objId, taskName) {
         var indexOfTargetId = DOM.getIndexOfProject(objId)
         var newObj = DOM.assignMethodsToProjectObj(objId);
@@ -176,7 +179,19 @@ export default class DOM {
         DOM.substituteProjectFromTodoList(indexOfTargetId, newObj);
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
+        DOM.removeInnerHTML("tasks-menu");
+        DOM.loadTaskList(objId);
+        DOM.taskCheck();
 
+    }
+
+    static taskCheck() {
+        
+        document.addEventListener("change", (e) => {
+            let projName = e.target.className
+            let projObj = DOM.assignMethodsToProjectObj(projName);
+            projObj.tasks
+        })
     }
 
 //-----START-------// OBJECT HANDLING FUNCTIONS //-------START--------//
@@ -285,6 +300,7 @@ export default class DOM {
             DOM.showProjNameInTaskList(`${e.target.id}`)
             DOM.openProject(e.target.id);
             DOM.createTaskButton();
+            DOM.taskCheck();
             });
     }
 
