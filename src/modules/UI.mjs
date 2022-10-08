@@ -1,6 +1,7 @@
 import TodoList from "./todolist.mjs";
 import createProject from "./projects.mjs";
 import Storage from "./storage.mjs"
+import newTask from "./tasks.mjs";
 import { create } from "lodash";
 import { compareAsc, format, formatDistance, subDays} from 'date-fns';
 
@@ -38,6 +39,8 @@ export default class DOM {
         <button id="${item.name}edit" class="taskEditButton">Edit</button></div>`
         // DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
+        DOM.taskCheck(projName);
+        
 
     }
     
@@ -158,6 +161,12 @@ export default class DOM {
         return indexOfTargetId;
     }
 
+    static getIndexOfTask(projObj, taskName) {
+        
+        var taskIndex = projObj.tasks.map(x => x.name).indexOf(`${taskName}`);
+        return taskIndex;
+    }
+
     /*Receives new ID(from input) and old ID(from target) */
     static changeObjName(targetId, newName) {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
@@ -176,21 +185,40 @@ export default class DOM {
         const today = format(new Date(), 'dd/MM/yyyy')
         newObj.setTask(taskName, today)
         newObj.isToday();
-        DOM.substituteProjectFromTodoList(indexOfTargetId, newObj);
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
         DOM.loadTaskList(objId);
-        DOM.taskCheck();
+        // newObj.tasks[0].setStatus(false);
+        // console.log("newObj from addTask")
+        console.log("!!!!")
+        console.log(newObj)
+        DOM.substituteProjectFromTodoList(indexOfTargetId, newObj);
+        
 
     }
 
-    static taskCheck() {
+    static taskCheck(projName) {
         
         document.addEventListener("change", (e) => {
-            let projName = e.target.className
+            let projIndex = DOM.getIndexOfProject(projName)
+            console.log("proj index: " + projIndex)
             let projObj = DOM.assignMethodsToProjectObj(projName);
-            projObj.tasks
+            let indexOfTask = DOM.getIndexOfTask(projObj, e.target.id);
+            console.log("####")
+            console.log(projObj)
+            // DOM.removeInnerHTML("projList");
+            // DOM.loadTodoList();
+            // DOM.removeInnerHTML("tasks-menu");
+            // DOM.loadTaskList(e.target.className);
+            // Storage.checkTask(projIndex, taskIndex, true)
+            // let targetTask = projObj.tasks[indexOfTask]
+            // console.log(targetTask)
+            console.log(projObj.tasks[indexOfTask])
+            projObj.tasks[indexOfTask].setStatus(true)
+            // targetTask.setStatus(true);
+            DOM.substituteProjectFromTodoList(projIndex, projObj);
+            
         })
     }
 
@@ -198,10 +226,21 @@ export default class DOM {
 
     /*Receives project id(object) and assigns object from module that contains all the necessary methods(proto methods)*/
     static assignMethodsToProjectObj(projectID) {
+        console.log("project ID: " + projectID)
         var getTodoList = Storage.getTodoList()
         var indexOfObject = DOM.getIndexOfProject(projectID)
         var newObject = Object.assign(createProject(), getTodoList.projects[indexOfObject])
-
+        // var assignMethodsToTasks = Object.newTask()
+        var tasksObj = newObject.tasks
+        // tasks.forEach(Object.assign(newTask(), tasks))
+        for(let x = 0; x < tasksObj.length; x++){
+            console.log("TASKS assign TEST")
+            console.log(tasksObj[x])
+            newObject.tasks[x] = Object.assign(newTask(), tasksObj[x])
+        }
+        Storage.saveTodoList(getTodoList);
+        console.log("new OBJ:")
+        console.log(newObject)
         return newObject
     }
 
@@ -211,6 +250,7 @@ export default class DOM {
         getTodoList.projects.splice(oldProjIndex, 1, newProj);
         Storage.saveTodoList(getTodoList);
     }
+
 
 
 //------END------// OBJECT HANDLING FUNCTIONS //--------END-------//
@@ -300,7 +340,8 @@ export default class DOM {
             DOM.showProjNameInTaskList(`${e.target.id}`)
             DOM.openProject(e.target.id);
             DOM.createTaskButton();
-            DOM.taskCheck();
+            // DOM.taskCheck(e.target.id);
+            // DOM.assignMethodsToProjectObj(e.target.id);
             });
     }
 

@@ -7,7 +7,7 @@ function protoMethods(){
         setNote(input){this.note = input},
         setDate(input){this.dueDate = input},
         setPriority(input){this.priority = input},
-        setStatus(input){this.status = input}
+        setStatus(input){this.done = input}
     }
     return protoMethods
 }
@@ -18,7 +18,7 @@ export default function newTask(name, date, note, level, status) {
         note: note,
         dueDate: date,
         priority: level,
-        status: status,
+        done: status,
         __proto__: protoMethods()
     }
     return task;
