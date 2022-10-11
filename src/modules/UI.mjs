@@ -23,7 +23,7 @@ export default class DOM {
         let projectsList = document.getElementById("projList");
         let showNameFunc = (item) => projectsList.innerHTML += `
         <div id="${item.name}" class="projListingClass">${item.name}
-        <button id="${item.name}edit" class="editButton">Edit</button></div>`
+        <button id="${item.name} edit" class="editButton">EDIT</button></div>`
         todoList.forEach(showNameFunc)
         DOM.selectProjOnClick();
     }
@@ -34,15 +34,22 @@ export default class DOM {
         let projIndex = DOM.getIndexOfProject(projName);
         let projectTasks = todoList[projIndex].tasks;
         let tasksMenu = document.getElementById("tasks-menu");
-        let showTasks = (item) => tasksMenu.innerHTML += `
-        <div><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
-        <button id="${item.name}edit" class="taskEditButton">Edit</button></div>`
+        let showTasks = (item) => {
+            if(item.done === true) {
+            tasksMenu.innerHTML += `
+        <div id="${item.name}" class="${projName}"><s>${item.name}</s>
+        <button id="${item.name}" class="taskDeleteButton">X</button></div>`
+    }
+        else
+            tasksMenu.innerHTML += `
+            <div><input id="${item.name}" class="${projName}" type="checkbox">${item.name}`
+        }
         // DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
         DOM.taskCheck(projName);
-        
-
+        DOM.deleteTaskButton();
     }
+        
     
     //Create Content
 
@@ -71,7 +78,7 @@ export default class DOM {
     static projectName(name) {
         let projectsList = document.getElementById("projList");
         projectsList.innerHTML += `<div id="${name}" class="projListingClass">${name} 
-        <button ="${name}edit" class="editButton">Edit</button></div>`
+        <button ="${name}edit" class="editButton"><b>EDIT</b></button></div>`
         
     }
 
@@ -183,17 +190,18 @@ export default class DOM {
         var indexOfTargetId = DOM.getIndexOfProject(objId)
         var newObj = DOM.assignMethodsToProjectObj(objId);
         const today = format(new Date(), 'dd/MM/yyyy')
-        newObj.setTask(taskName, today)
+        newObj.setTask(taskName, today, false)
         newObj.isToday();
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
-        DOM.loadTaskList(objId);
         // newObj.tasks[0].setStatus(false);
         // console.log("newObj from addTask")
         console.log("!!!!")
         console.log(newObj)
         DOM.substituteProjectFromTodoList(indexOfTargetId, newObj);
+        DOM.removeInnerHTML("tasks-menu");
+        DOM.loadTaskList(objId);
         
 
     }
@@ -214,11 +222,23 @@ export default class DOM {
             // Storage.checkTask(projIndex, taskIndex, true)
             // let targetTask = projObj.tasks[indexOfTask]
             // console.log(targetTask)
+            console.log("task check")
             console.log(projObj.tasks[indexOfTask])
             projObj.tasks[indexOfTask].setStatus(true)
             // targetTask.setStatus(true);
             DOM.substituteProjectFromTodoList(projIndex, projObj);
+            DOM.removeInnerHTML("tasks-menu");
+            DOM.loadTaskList(projName);
             
+        })
+    }
+
+    static deleteTaskButton() {
+        let delTaskButton = document.getElementsByClassName("taskDeleteButton")
+        document.addEventListener("click", (e) => {
+            if(e.target.className != "taskDeleteButton") return
+            console.log(e.target)
+            DOM.removeDiv(e.target.id)
         })
     }
 
@@ -326,10 +346,12 @@ export default class DOM {
             if(e.target.className != "editButton") return
 
             let targetId = e.target.parentNode.id
-
+            //--------> ADD DELETE TASK FUNCTION <------------------
             DOM.inputField(targetId)});
 
     }
+
+
 
     static selectProjOnClick() {
         let taskListValue = document.getElementById("tasksList")
