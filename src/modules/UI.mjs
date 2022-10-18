@@ -195,10 +195,6 @@ export default class DOM {
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
-        // newObj.tasks[0].setStatus(false);
-        // console.log("newObj from addTask")
-        console.log("!!!!")
-        console.log(newObj)
         DOM.substituteProjectFromTodoList(indexOfTargetId, newObj);
         DOM.removeInnerHTML("tasks-menu");
         DOM.loadTaskList(objId);
@@ -209,23 +205,12 @@ export default class DOM {
     static taskCheck(projName) {
         
         document.addEventListener("change", (e) => {
-            let projIndex = DOM.getIndexOfProject(projName)
-            console.log("proj index: " + projIndex)
-            let projObj = DOM.assignMethodsToProjectObj(projName);
-            let indexOfTask = DOM.getIndexOfTask(projObj, e.target.id);
-            console.log("####")
+            let projIndex = DOM.getIndexOfProject(e.target.className)
+            let projObj = DOM.assignMethodsToProjectObj(e.target.className);
+            console.log("proj Obj To see Task problem")
             console.log(projObj)
-            // DOM.removeInnerHTML("projList");
-            // DOM.loadTodoList();
-            // DOM.removeInnerHTML("tasks-menu");
-            // DOM.loadTaskList(e.target.className);
-            // Storage.checkTask(projIndex, taskIndex, true)
-            // let targetTask = projObj.tasks[indexOfTask]
-            // console.log(targetTask)
-            console.log("task check")
-            console.log(projObj.tasks[indexOfTask])
+            let indexOfTask = DOM.getIndexOfTask(projObj, e.target.id);
             projObj.tasks[indexOfTask].setStatus(true)
-            // targetTask.setStatus(true);
             DOM.substituteProjectFromTodoList(projIndex, projObj);
             DOM.removeInnerHTML("tasks-menu");
             DOM.loadTaskList(projName);
@@ -234,11 +219,15 @@ export default class DOM {
     }
 
     static deleteTaskButton() {
-        let delTaskButton = document.getElementsByClassName("taskDeleteButton")
         document.addEventListener("click", (e) => {
             if(e.target.className != "taskDeleteButton") return
-            console.log(e.target)
-            DOM.removeDiv(e.target.id)
+            let projName = DOM.returnParentNodeClass(e.target.id)
+            let projObj = DOM.assignMethodsToProjectObj(projName())
+            let taskIndex = DOM.getIndexOfTask(projObj, e.target.id)
+            let objectIndex = DOM.getIndexOfProject(projName())
+            projObj.deleteTask(taskIndex)
+            DOM.substituteProjectFromTodoList(objectIndex, projObj)
+            DOM.removeDiv(e.target.id);
         })
     }
 
@@ -250,9 +239,7 @@ export default class DOM {
         var getTodoList = Storage.getTodoList()
         var indexOfObject = DOM.getIndexOfProject(projectID)
         var newObject = Object.assign(createProject(), getTodoList.projects[indexOfObject])
-        // var assignMethodsToTasks = Object.newTask()
         var tasksObj = newObject.tasks
-        // tasks.forEach(Object.assign(newTask(), tasks))
         for(let x = 0; x < tasksObj.length; x++){
             console.log("TASKS assign TEST")
             console.log(tasksObj[x])
@@ -307,6 +294,16 @@ export default class DOM {
         let getValue = function() {
             var getElement = document.getElementById(elemId)
             var returnValue = getElement.parentNode.id;
+            return returnValue
+        }
+
+        return getValue
+    }
+
+    static returnParentNodeClass(elemId) {
+        let getValue = () => {
+            var getElement = document.getElementById(elemId)
+            let returnValue = getElement.className;
             return returnValue
         }
 
