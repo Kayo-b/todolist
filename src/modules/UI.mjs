@@ -149,11 +149,16 @@ export default class DOM {
         Storage.addProject(projName)
         DOM.hideButton("addproject", "no")
         DOM.removeDiv("inputElement")
-        DOM.projectName(projName);
+        DOM.removeInnerHTML("projList")
+        DOM.loadTodoList();
+        //DOM.projectName(projName);
+        console.log("projname = ")
+        console.log(projName)
         DOM.showProjNameInTaskList(`${projName}`);
+        DOM.openProject(projName);
         DOM.taskInput(projName);   
-        DOM.addTaskButton();
-        DOM.loadTaskList(projName);
+        //DOM.addTaskButton();
+        //DOM.loadTaskList(projName);
 
     }
 
@@ -198,6 +203,7 @@ export default class DOM {
         DOM.substituteProjectFromTodoList(indexOfTargetId, newObj);
         DOM.removeInnerHTML("tasks-menu");
         DOM.loadTaskList(objId);
+        DOM.hideButton("addtask", "no");
         
 
     }
@@ -370,7 +376,9 @@ export default class DOM {
         var inputValue = DOM.returnPrevElemSiblingValue(taskInputButton);
         var projectName = DOM.returnChildNodeId(taskInputField)
 
-        taskInputButton.addEventListener("click", function() {DOM.addTask(projectName(), inputValue())});
+        taskInputButton.addEventListener("click", function() {
+            DOM.addTask(projectName(), inputValue())
+            ;});
     }
 
     static createTaskButton() {
