@@ -42,12 +42,14 @@ export default class DOM {
     }
         else
             tasksMenu.innerHTML += `
-            <div><input id="${item.name}" class="${projName}" type="checkbox">${item.name}`
+            <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
+            <input id="${item.name}" class="${projName}" type="date"><button id="setDateButton">Set</button>`
         }
         // DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
         DOM.taskCheck(projName);
         DOM.deleteTaskButton();
+        DOM.setDateButton();
     }
         
     
@@ -133,6 +135,11 @@ export default class DOM {
         DOM.confirmUpdateProj(targetId)
 
     }
+
+    // static setDateInputField(projID) {
+    //     let taskList = document.getElementById("taskList");
+
+    // }
     // Event Listeners
 
     static newProject() {
@@ -145,7 +152,7 @@ export default class DOM {
     static createProjObject() {
         let projName = document.getElementById("projname").value;
         if(projName == "") return alert("Please inform the project's name");
-
+        else if(DOM.getIndexOfProject(projName) >= 0) return alert("project name already used");
         Storage.addProject(projName)
         DOM.hideButton("addproject", "no")
         DOM.removeDiv("inputElement")
@@ -173,8 +180,8 @@ export default class DOM {
         return indexOfTargetId;
     }
 
-    static getIndexOfTask(projObj, taskName) {
-        
+    static getIndexOfTask(projID, taskName) {
+        let projObj = DOM.assignMethodsToProjectObj(projID)
         var taskIndex = projObj.tasks.map(x => x.name).indexOf(`${taskName}`);
         return taskIndex;
     }
@@ -192,11 +199,14 @@ export default class DOM {
 
     //Action that occurs after the "Add" button is pressed
     static addTask(objId, taskName) {
+        if(taskName == "") return alert("please insert a task name");
+        else if(DOM.getIndexOfTask(objId, taskName) >= 0) return alert("task already listed");
+
         var indexOfTargetId = DOM.getIndexOfProject(objId)
         var newObj = DOM.assignMethodsToProjectObj(objId);
-        const today = format(new Date(), 'dd/MM/yyyy')
-        newObj.setTask(taskName, today, false)
-        newObj.isToday();
+        //const today = "10/12/2020"//format(new Date(), 'dd/MM/yyyy')
+        newObj.setTask(taskName, null, false)
+        //newObj.isToday();
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
@@ -208,14 +218,27 @@ export default class DOM {
 
     }
 
+    static setTaskDate(projId, taskId, input) {
+        let projIndex = DOM.getIndexOfProject(projId)
+        let newObj = DOM.assignMethodsToProjectObj(projId);
+        let taskIndex = DOM.getIndexOfTask(projId, taskId);
+        console.log("####!!!!!!!!!!!!!!!!!!!!!!########")
+        console.log(taskId)
+        console.log(taskIndex)
+        console.log(projIndex)
+        newObj.tasks[taskIndex].setDate(input);
+        DOM.substituteProjectFromTodoList(projIndex, newObj);
+
+        
+    }
+
     static taskCheck(projName) {
         
         document.addEventListener("change", (e) => {
+            if(e.target.type != "checkbox") return
             let projIndex = DOM.getIndexOfProject(e.target.className)
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
-            console.log("proj Obj To see Task problem")
-            console.log(projObj)
-            let indexOfTask = DOM.getIndexOfTask(projObj, e.target.id);
+            let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);//changed
             projObj.tasks[indexOfTask].setStatus(true)
             DOM.substituteProjectFromTodoList(projIndex, projObj);
             DOM.removeInnerHTML("tasks-menu");
@@ -229,12 +252,22 @@ export default class DOM {
             if(e.target.className != "taskDeleteButton") return
             let projName = DOM.returnParentNodeClass(e.target.id)
             let projObj = DOM.assignMethodsToProjectObj(projName())
-            let taskIndex = DOM.getIndexOfTask(projObj, e.target.id)
+            let taskIndex = DOM.getIndexOfTask(projName(), e.target.id)
             let objectIndex = DOM.getIndexOfProject(projName())
             projObj.deleteTask(taskIndex)
             DOM.substituteProjectFromTodoList(objectIndex, projObj)
             DOM.removeDiv(e.target.id);
         })
+    }
+
+
+    /*Reads the new input value and sends it with the old input value to editProject function*/
+    static confirmUpdateProj(oldValue) {
+        var okEditButton = document.getElementById("okEditButton");
+        let newValue = DOM.returnPrevElemSiblingValue(okEditButton)
+        
+        DOM.deleteProjectButton();  
+        okEditButton.addEventListener("click", function() { DOM.changeObjName(oldValue, newValue())});
     }
 
 //-----START-------// OBJECT HANDLING FUNCTIONS //-------START--------//
@@ -269,14 +302,9 @@ export default class DOM {
 //------END------// OBJECT HANDLING FUNCTIONS //--------END-------//
 
 
-    /*Reads the new input value and sends it with the old input value to editProject function*/
-    static confirmUpdateProj(oldValue) {
-        var okEditButton = document.getElementById("okEditButton");
-        let newValue = DOM.returnPrevElemSiblingValue(okEditButton)
-        
-        DOM.deleteProjectButton();  
-        okEditButton.addEventListener("click", function() { DOM.changeObjName(oldValue, newValue())});
-    }
+//------UTILITIES------//
+
+
 
     static returnPrevElemSiblingValue(elemId) {
         let getValue = () => {
@@ -337,21 +365,25 @@ export default class DOM {
     static deleteProjectButton() {
         var deleteButtonTeste = document.getElementById("delButtonTeste");
         var siblingId = DOM.returnPrevElemSiblingId(deleteButtonTeste);
-        var delButSibling = document.getElementById(siblingId())
-        var siblingId2 = DOM.returnPrevElemSiblingId(delButSibling)
-        deleteButtonTeste.addEventListener("click", function(){DOM.deleteProjectObj(siblingId2())})
+        var delButSibling = document.getElementById(siblingId());
+        var siblingId2 = DOM.returnPrevElemSiblingId(delButSibling);
+        deleteButtonTeste.addEventListener("click", function(){DOM.deleteProjectObj(siblingId2())});
     }
 
     /*Gets button parent node ID and sends it to inputField where the input field
     is created in the correct location */
     static getTargetId() {
         document.addEventListener("click", (e) => {
-            if(e.target.className != "editButton") return
-
-            let targetId = e.target.parentNode.id
-            //--------> ADD DELETE TASK FUNCTION <------------------
-            DOM.inputField(targetId)});
-
+            if(e.target.className == "editButton"){ 
+                let targetId = e.target.parentNode.id;
+                DOM.inputField(targetId)};
+            
+            // if(e.target.className == "setDate"){
+            //     let targetId = e.target.previousElementSibling.className;
+                
+            // }
+        })
+           
     }
 
 
@@ -385,6 +417,19 @@ export default class DOM {
         let projName = document.getElementById("tasksList").value;
         var createButton = document.getElementById("addtask");
         createButton.addEventListener("click", () => DOM.taskInput(projName))
+    }
+
+    static setDateButton() {
+        //let setDateButton = document.getElementById("setDate");
+        document.addEventListener("click", (e) => {
+            if(e.target.id != "setDateButton") return
+            console.log("!*!*!*!*!*!*!*!**!*!*!*!*!*!*!*!*!")
+            console.log(e.target.previousElementSibling.value)
+            let input = e.target.previousElementSibling.value;
+            let projId = e.target.previousElementSibling.className;
+            let taskId = e.target.previousElementSibling.id;
+            DOM.setTaskDate(projId, taskId, input);
+        })
     }
 
 }
