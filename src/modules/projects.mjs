@@ -2,7 +2,7 @@ import { compareAsc, format, formatDistance, subDays} from 'date-fns';
 // import { forEach } from 'lodash';
 import newTask from "./tasks.mjs";
 
-const today = format(new Date(), 'dd/MM/yyyy')
+const today = format(new Date(), 'yyyy-MM-dd')
 
 function protoMethods() {
     var protoMethods = {
@@ -14,6 +14,7 @@ function protoMethods() {
         deleteAllTasks(){this.tasks = []},
         isToday() {
             for(let x = 0; x < this.tasks.length; x++) { 
+                console.log("IS TODAY TESTE")
                 if(this.tasks[x].dueDate === today) {
                     this.todayArr.push(this.tasks[x])}}}
     }

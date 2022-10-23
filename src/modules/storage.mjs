@@ -31,14 +31,6 @@ export default class Storage {
 
     }
 
-    // static checkTask(projIndex, taskIndex, status) {
-    //     const todoList = Storage.getTodoList();
-    //     var project = todoList.projects[projIndex]
-    //     project.tasks[taskIndex].setStatus(status)
-    //     Storage.saveTodoList(todoList)
-
-    // }
-
     static deleteProject(index) {
         const todoList = Storage.getTodoList();
         todoList.deleteProject(index);

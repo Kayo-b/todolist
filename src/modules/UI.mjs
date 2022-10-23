@@ -36,15 +36,20 @@ export default class DOM {
         let tasksMenu = document.getElementById("tasks-menu");
         let showTasks = (item) => {
             if(item.done === true) {
-            tasksMenu.innerHTML += `
-        <div id="${item.name}" class="${projName}"><s>${item.name}</s>
-        <button id="${item.name}" class="taskDeleteButton">X</button></div>`
+                tasksMenu.innerHTML += `
+                <div id="${item.name}" class="${projName}"><s>${item.name}</s>
+                <button id="${item.name}" class="taskDeleteButton">X</button></div>`
     }
-        else
-            tasksMenu.innerHTML += `
-            <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
-            <input id="${item.name}" class="${projName}" type="date"><button id="setDateButton">Set</button>`
-        }
+            if(item.dueDate == null && item.done == false){
+                tasksMenu.innerHTML += `
+                <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
+                <input type="date" id="${item.name}" class="${projName}" min="2018-01-01" max="2030-12-31">`}
+
+            if(item.dueDate != null && item.done == false)
+                tasksMenu.innerHTML += `
+                <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
+                <input type="date" id="${item.name}" class="${projName}" value="${item.dueDate}" min="2018-01-01" max="2030-12-31">`    
+            }
         // DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
         DOM.taskCheck(projName);
@@ -222,12 +227,16 @@ export default class DOM {
         let projIndex = DOM.getIndexOfProject(projId)
         let newObj = DOM.assignMethodsToProjectObj(projId);
         let taskIndex = DOM.getIndexOfTask(projId, taskId);
-        console.log("####!!!!!!!!!!!!!!!!!!!!!!########")
+        console.log("####!!!!!!!!!!!! >DATE< !!!!!!!!!!########")
         console.log(taskId)
         console.log(taskIndex)
         console.log(projIndex)
         newObj.tasks[taskIndex].setDate(input);
+        console.log(newObj)
+        newObj.isToday();
         DOM.substituteProjectFromTodoList(projIndex, newObj);
+        console.log(newObj.tasks[taskIndex].dueDate)
+        console.log(format(new Date(), 'dd-MM-yyyy'))
 
         
     }
@@ -421,13 +430,13 @@ export default class DOM {
 
     static setDateButton() {
         //let setDateButton = document.getElementById("setDate");
-        document.addEventListener("click", (e) => {
-            if(e.target.id != "setDateButton") return
+        document.addEventListener("change", (e) => {
+            if(e.target.type != "date") return
             console.log("!*!*!*!*!*!*!*!**!*!*!*!*!*!*!*!*!")
             console.log(e.target.previousElementSibling.value)
-            let input = e.target.previousElementSibling.value;
-            let projId = e.target.previousElementSibling.className;
-            let taskId = e.target.previousElementSibling.id;
+            let input = e.target.value//e.target.previousElementSibling.value;
+            let projId = e.target.className//e.target.previousElementSibling.className;
+            let taskId = e.target.id//e.target.previousElementSibling.id;
             DOM.setTaskDate(projId, taskId, input);
         })
     }
