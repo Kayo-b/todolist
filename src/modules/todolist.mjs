@@ -30,10 +30,10 @@ export default class TodoList {
         this.projects = [];
     }
 
-    deleteTask(projIndex, taskIndex) {
-        //this.projects[projIndex].deleteTask(taskIndex)
-        console.log(this.projects[projIndex])
-    }
+    // deleteTask(projIndex, taskIndex) {
+    //     //this.projects[projIndex].deleteTask(taskIndex)
+    //     console.log(this.projects[projIndex])
+    // }
 
     todayTask() {
         for(let x = 0; x < this.projects.length; x++) {

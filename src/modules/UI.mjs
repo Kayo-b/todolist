@@ -259,14 +259,29 @@ export default class DOM {
     static deleteTaskButton() {
         document.addEventListener("click", (e) => {
             if(e.target.className != "taskDeleteButton") return
-            let projName = DOM.returnParentNodeClass(e.target.id)
-            let projObj = DOM.assignMethodsToProjectObj(projName())
-            let taskIndex = DOM.getIndexOfTask(projName(), e.target.id)
-            let objectIndex = DOM.getIndexOfProject(projName())
-            projObj.deleteTask(taskIndex)
-            DOM.substituteProjectFromTodoList(objectIndex, projObj)
+            console.log("etarget ID")
+            console.log(e.target.id)
+            let projName = e.target.parentNode.className
+            console.log("projName")
+            console.log(projName)
+            let taskIndex = DOM.getIndexOfTask(projName, e.target.id);
+            let objectIndex = DOM.getIndexOfProject(projName);
+            console.log("task index: " + taskIndex)
+            console.log("project object index: " + objectIndex)
+            let projObj = DOM.assignMethodsToProjectObj(projName);
+            console.log("projObj123123")
+            console.log(projObj)
+            // console.log("task and obj indexes")
+            // console.log(taskIndex)
+            // console.log(objectIndex)
+            projObj.deleteTask(taskIndex);
+            console.log("projOb NEWWWWWWWWWWWWww")
+            console.log(projObj)
+            console.log(objectIndex)
             DOM.removeDiv(e.target.id);
+            DOM.substituteProjectFromTodoList(objectIndex, projObj);
         })
+
     }
 
 
@@ -286,7 +301,11 @@ export default class DOM {
         console.log("project ID: " + projectID)
         var getTodoList = Storage.getTodoList()
         var indexOfObject = DOM.getIndexOfProject(projectID)
+        console.log("indexOfProject")
+        console.log(indexOfObject)
         var newObject = Object.assign(createProject(), getTodoList.projects[indexOfObject])
+        console.log("NEW OBJ")
+        console.log(newObject)
         var tasksObj = newObject.tasks
         for(let x = 0; x < tasksObj.length; x++){
             console.log("TASKS assign TEST")
@@ -301,7 +320,9 @@ export default class DOM {
 
     //Removes old object and adds new object to the same position
     static substituteProjectFromTodoList(oldProjIndex, newProj) {
-        var getTodoList = Storage.getTodoList()
+        console.log("SUBSTITUTE PROJECT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log(newProj)
+        var getTodoList = Storage.getTodoList();
         getTodoList.projects.splice(oldProjIndex, 1, newProj);
         Storage.saveTodoList(getTodoList);
     }
@@ -344,9 +365,17 @@ export default class DOM {
     }
 
     static returnParentNodeClass(elemId) {
+        console.log("returnParentNodeClass")
+        console.log(elemId)
         let getValue = () => {
             var getElement = document.getElementById(elemId)
-            let returnValue = getElement.className;
+            console.log("getElement")
+            console.log(getElement)
+            let returnValue = getElement.parentNode;
+            console.log("elemId")
+            console.log(elemId)
+            console.log("returnValue")
+            console.log(returnValue)
             return returnValue
         }
 
