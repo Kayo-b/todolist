@@ -3,7 +3,7 @@ import createProject from "./projects.mjs";
 import Storage from "./storage.mjs"
 import newTask from "./tasks.mjs";
 import { create } from "lodash";
-import { compareAsc, format, formatDistance, subDays} from 'date-fns';
+import { compareAsc, format, formatDistance, setDate, subDays} from 'date-fns';
 
 export default class DOM {
 
@@ -14,6 +14,9 @@ export default class DOM {
         DOM.getTargetId();
         DOM.createProjObject();
         DOM.loadTodoList();
+        //DOM.taskCheck();
+        //DOM.deleteTaskButton();
+        //DOM.setDateButton();
     }
 
     /*Gets todoList from localStorage and renders it on the page */
@@ -26,6 +29,7 @@ export default class DOM {
         <button id="${item.name} edit" class="editButton">EDIT</button></div>`
         todoList.forEach(showNameFunc)
         DOM.selectProjOnClick();
+        //DOM.setDateButton();
     }
 
     static loadTaskList(projName) {
@@ -33,6 +37,7 @@ export default class DOM {
         todoList = todoList.projects;
         let projIndex = DOM.getIndexOfProject(projName);
         let projectTasks = todoList[projIndex].tasks;
+        DOM.removeInnerHTML("tasks-menu");
         let tasksMenu = document.getElementById("tasks-menu");
         let showTasks = (item) => {
             if(item.done === true) {
@@ -50,11 +55,12 @@ export default class DOM {
                 <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
                 <input type="date" id="${item.name}" class="${projName}" value="${item.dueDate}" min="2018-01-01" max="2030-12-31">`    
             }
-        // DOM.removeInnerHTML(tasksMenu);
+        //DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
         DOM.taskCheck(projName);
         DOM.deleteTaskButton();
         DOM.setDateButton();
+        DOM.eraseDate();
     }
         
     
@@ -164,13 +170,12 @@ export default class DOM {
         DOM.removeInnerHTML("projList")
         DOM.loadTodoList();
         //DOM.projectName(projName);
-        console.log("projname = ")
-        console.log(projName)
         DOM.showProjNameInTaskList(`${projName}`);
         DOM.openProject(projName);
         DOM.taskInput(projName);   
         //DOM.addTaskButton();
         //DOM.loadTaskList(projName);
+        
 
     }
 
@@ -209,9 +214,7 @@ export default class DOM {
 
         var indexOfTargetId = DOM.getIndexOfProject(objId)
         var newObj = DOM.assignMethodsToProjectObj(objId);
-        //const today = "10/12/2020"//format(new Date(), 'dd/MM/yyyy')
         newObj.setTask(taskName, null, false)
-        //newObj.isToday();
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
@@ -219,6 +222,7 @@ export default class DOM {
         DOM.removeInnerHTML("tasks-menu");
         DOM.loadTaskList(objId);
         DOM.hideButton("addtask", "no");
+        //DOM.setDateButton();
         
 
     }
@@ -227,23 +231,16 @@ export default class DOM {
         let projIndex = DOM.getIndexOfProject(projId)
         let newObj = DOM.assignMethodsToProjectObj(projId);
         let taskIndex = DOM.getIndexOfTask(projId, taskId);
-        console.log("####!!!!!!!!!!!! >DATE< !!!!!!!!!!########")
-        console.log(taskId)
-        console.log(taskIndex)
-        console.log(projIndex)
         newObj.tasks[taskIndex].setDate(input);
-        console.log(newObj)
         newObj.isToday();
         DOM.substituteProjectFromTodoList(projIndex, newObj);
-        console.log(newObj.tasks[taskIndex].dueDate)
-        console.log(format(new Date(), 'dd-MM-yyyy'))
 
         
     }
 
     static taskCheck(projName) {
-        
-        document.addEventListener("change", (e) => {
+        let checkbox = document.getElementById("tasks-menu")
+        checkbox.addEventListener("change", (e) => {
             if(e.target.type != "checkbox") return
             let projIndex = DOM.getIndexOfProject(e.target.className)
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
@@ -257,28 +254,15 @@ export default class DOM {
     }
 
     static deleteTaskButton() {
-        document.addEventListener("click", (e) => {
+        let deleteTask = document.getElementById("tasks-menu")
+        deleteTask.addEventListener("click", (e) => {
             if(e.target.className != "taskDeleteButton") return
-            console.log("etarget ID")
-            console.log(e.target.id)
             let projName = e.target.parentNode.className
-            console.log("projName")
-            console.log(projName)
             let taskIndex = DOM.getIndexOfTask(projName, e.target.id);
             let objectIndex = DOM.getIndexOfProject(projName);
-            console.log("task index: " + taskIndex)
-            console.log("project object index: " + objectIndex)
             let projObj = DOM.assignMethodsToProjectObj(projName);
-            console.log("projObj123123")
-            console.log(projObj)
-            // console.log("task and obj indexes")
-            // console.log(taskIndex)
-            // console.log(objectIndex)
             projObj.deleteTask(taskIndex);
-            console.log("projOb NEWWWWWWWWWWWWww")
-            console.log(projObj)
-            console.log(objectIndex)
-            DOM.removeDiv(e.target.id);
+            e.target.parentNode.remove()
             DOM.substituteProjectFromTodoList(objectIndex, projObj);
         })
 
@@ -298,30 +282,19 @@ export default class DOM {
 
     /*Receives project id(object) and assigns object from module that contains all the necessary methods(proto methods)*/
     static assignMethodsToProjectObj(projectID) {
-        console.log("project ID: " + projectID)
         var getTodoList = Storage.getTodoList()
         var indexOfObject = DOM.getIndexOfProject(projectID)
-        console.log("indexOfProject")
-        console.log(indexOfObject)
         var newObject = Object.assign(createProject(), getTodoList.projects[indexOfObject])
-        console.log("NEW OBJ")
-        console.log(newObject)
         var tasksObj = newObject.tasks
         for(let x = 0; x < tasksObj.length; x++){
-            console.log("TASKS assign TEST")
-            console.log(tasksObj[x])
             newObject.tasks[x] = Object.assign(newTask(), tasksObj[x])
         }
         Storage.saveTodoList(getTodoList);
-        console.log("new OBJ:")
-        console.log(newObject)
         return newObject
     }
 
     //Removes old object and adds new object to the same position
     static substituteProjectFromTodoList(oldProjIndex, newProj) {
-        console.log("SUBSTITUTE PROJECT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        console.log(newProj)
         var getTodoList = Storage.getTodoList();
         getTodoList.projects.splice(oldProjIndex, 1, newProj);
         Storage.saveTodoList(getTodoList);
@@ -365,17 +338,9 @@ export default class DOM {
     }
 
     static returnParentNodeClass(elemId) {
-        console.log("returnParentNodeClass")
-        console.log(elemId)
         let getValue = () => {
             var getElement = document.getElementById(elemId)
-            console.log("getElement")
-            console.log(getElement)
             let returnValue = getElement.parentNode;
-            console.log("elemId")
-            console.log(elemId)
-            console.log("returnValue")
-            console.log(returnValue)
             return returnValue
         }
 
@@ -428,7 +393,8 @@ export default class DOM {
 
     static selectProjOnClick() {
         let taskListValue = document.getElementById("tasksList")
-        document.addEventListener("click", (e) => {
+        let clickOnProject = document.getElementById("projList")
+        clickOnProject.addEventListener("click", (e) => {
             if(e.target.className != "projListingClass") return
 
             taskListValue.value = e.target.id;
@@ -437,6 +403,7 @@ export default class DOM {
             DOM.createTaskButton();
             // DOM.taskCheck(e.target.id);
             // DOM.assignMethodsToProjectObj(e.target.id);
+            //DOM.setDateButton();
             });
     }
 
@@ -458,16 +425,38 @@ export default class DOM {
     }
 
     static setDateButton() {
-        //let setDateButton = document.getElementById("setDate");
-        document.addEventListener("change", (e) => {
-            if(e.target.type != "date") return
-            console.log("!*!*!*!*!*!*!*!**!*!*!*!*!*!*!*!*!")
-            console.log(e.target.previousElementSibling.value)
-            let input = e.target.value//e.target.previousElementSibling.value;
-            let projId = e.target.className//e.target.previousElementSibling.className;
-            let taskId = e.target.id//e.target.previousElementSibling.id;
+        let setDateButton = document.getElementById("tasks-menu");
+        let eventFunction = (e) => {
+            let input = e.target.value
+            let projId = e.target.className
+            let taskId = e.target.id
+            if(e.target.type == "date" && e.target.value == "") return;
+            if(e.target.type != "date") return;
+            console.log("change TEST")
+            console.log(e.target.value)
             DOM.setTaskDate(projId, taskId, input);
+        }
+        setDateButton.addEventListener("change", eventFunction)
+        var teste = setDateButton.addEventListener("change", eventFunction)
+        console.log(teste)
+    }
+
+    static eraseDate() {
+        let setDateButton = document.getElementById("tasks-menu");
+        setDateButton.addEventListener("click", (e) => {
+            if(e.target.type != "date") return
+            if(e.target.value == "" || e.target.value == undefined || e.target.value == null) return
+            console.log("CLICK TEST")
+            console.log(e.target.value)
+            //checkDateContent(e)
+            let projId = e.target.className
+            let taskId = e.target.id
+            DOM.setTaskDate(projId, taskId, "");
+
         })
+        //let checkDateContent = function(ev){console.log("E TARGET  VALUE TESTE"), console.log(ev.target.value)}
+
+        //setDateButton.addEventListener("click", (e) => checkDateContent(e))
     }
 
 }
