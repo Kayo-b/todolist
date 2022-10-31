@@ -60,7 +60,8 @@ export default class DOM {
         DOM.taskCheck(projName);
         DOM.deleteTaskButton();
         DOM.setDateButton();
-        DOM.eraseDate();
+        //DOM.eraseDate();
+        //Storage.addMethodsToProjectsInTodoList();
     }
         
     
@@ -441,7 +442,7 @@ export default class DOM {
         console.log(teste)
     }
 
-    static eraseDate() {
+   /* static eraseDate() {
         let setDateButton = document.getElementById("tasks-menu");
         setDateButton.addEventListener("click", (e) => {
             if(e.target.type != "date") return
@@ -457,6 +458,6 @@ export default class DOM {
         //let checkDateContent = function(ev){console.log("E TARGET  VALUE TESTE"), console.log(ev.target.value)}
 
         //setDateButton.addEventListener("click", (e) => checkDateContent(e))
-    }
+    }*/
 
 }

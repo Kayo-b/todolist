@@ -17,6 +17,22 @@ export default class Storage {
         
     }
 
+    static addMethodsToProjectsInTodoList() {
+        let todoList = Storage.getTodoList()
+        let newProjectArr = []
+        for(let x = 0; x < todoList.projects.length; x++){
+            let projObjWithMethods = Object.assign(createProject(), todoList.projects[x])
+            let tasksObj = projObjWithMethods.tasks
+            for(let y = 0; y < tasksObj.length; y++){
+                tasksObj[y] = Object.assign(newTask(), tasksObj[y])
+        }
+            newProjectArr.push(projObjWithMethods)
+        }
+
+        console.log(newProjectArr)
+        return newProjectArr
+    }
+
     static addProject(project) {
         const todoList = Storage.getTodoList();
         todoList.addProject(project);
