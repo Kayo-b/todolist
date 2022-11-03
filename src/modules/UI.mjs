@@ -29,7 +29,6 @@ export default class DOM {
         <button id="${item.name} edit" class="editButton">EDIT</button></div>`
         todoList.forEach(showNameFunc)
         DOM.selectProjOnClick();
-        //DOM.setDateButton();
     }
 
     static loadTaskList(projName) {
@@ -37,9 +36,14 @@ export default class DOM {
         todoList = todoList.projects;
         let projIndex = DOM.getIndexOfProject(projName);
         let projectTasks = todoList[projIndex].tasks;
-        DOM.removeInnerHTML("tasks-menu");
+        let projectList = document.getElementById("tasksList");
+        //DOM.showProjNameInTaskList(projName)
+        projectList.innerHTML = `${projName}<div id="tasks-menu">
+          </div>`
+        projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)
         let tasksMenu = document.getElementById("tasks-menu");
         let showTasks = (item) => {
+            console.log("SHOWTASK TEST")
             if(item.done === true) {
                 tasksMenu.innerHTML += `
                 <div id="${item.name}" class="${projName}"><s>${item.name}</s>
@@ -57,7 +61,7 @@ export default class DOM {
             }
         //DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
-        DOM.taskCheck(projName);
+        DOM.taskCheck();
         DOM.deleteTaskButton();
         DOM.setDateButton();
         //DOM.eraseDate();
@@ -68,11 +72,10 @@ export default class DOM {
     //Create Content
 
     static openProject(projName) {
-
-        let projectList = document.getElementById("tasksList");
+        /*let projectList = document.getElementById("tasksList");
         projectList.innerHTML += `<div id="tasks-menu">
           </div>`
-        projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)
+        projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)*/
         DOM.loadTaskList(projName);
     
     }
@@ -197,6 +200,12 @@ export default class DOM {
         return taskIndex;
     }
 
+    static getIndexOfTodayArrTask(projID, taskName) {
+        let projObj = DOM.assignMethodsToProjectObj(projID)
+        var taskIndex = projObj.todayArr.map(x => x.name).indexOf(`${taskName}`);
+        return taskIndex;
+    }
+
     /*Receives new ID(from input) and old ID(from target) */
     static changeObjName(targetId, newName) {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
@@ -215,7 +224,7 @@ export default class DOM {
 
         var indexOfTargetId = DOM.getIndexOfProject(objId)
         var newObj = DOM.assignMethodsToProjectObj(objId);
-        newObj.setTask(taskName, null, false)
+        newObj.setTask(taskName, null, false, "")
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
@@ -233,23 +242,25 @@ export default class DOM {
         let newObj = DOM.assignMethodsToProjectObj(projId);
         let taskIndex = DOM.getIndexOfTask(projId, taskId);
         newObj.tasks[taskIndex].setDate(input);
-        newObj.isToday();
+        console.log("SET TASK DATE")
+        newObj.isToday(taskIndex);
         DOM.substituteProjectFromTodoList(projIndex, newObj);
 
         
     }
 
-    static taskCheck(projName) {
+    static taskCheck() {
         let checkbox = document.getElementById("tasks-menu")
         checkbox.addEventListener("change", (e) => {
             if(e.target.type != "checkbox") return
             let projIndex = DOM.getIndexOfProject(e.target.className)
+            console.log("CHECKBOX CHANGE")
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
             let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);//changed
             projObj.tasks[indexOfTask].setStatus(true)
             DOM.substituteProjectFromTodoList(projIndex, projObj);
             DOM.removeInnerHTML("tasks-menu");
-            DOM.loadTaskList(projName);
+            DOM.loadTaskList(e.target.className);
             
         })
     }
@@ -262,6 +273,10 @@ export default class DOM {
             let taskIndex = DOM.getIndexOfTask(projName, e.target.id);
             let objectIndex = DOM.getIndexOfProject(projName);
             let projObj = DOM.assignMethodsToProjectObj(projName);
+            if(projObj.tasks[taskIndex].note != ""){
+                let todayArrIndex = DOM.getIndexOfTodayArrTask(projName, e.target.id);
+                projObj.deleteTodayArrTask(todayArrIndex)
+            }
             projObj.deleteTask(taskIndex);
             e.target.parentNode.remove()
             DOM.substituteProjectFromTodoList(objectIndex, projObj);
@@ -426,8 +441,8 @@ export default class DOM {
     }
 
     static setDateButton() {
-        let setDateButton = document.getElementById("tasks-menu");
-        let eventFunction = (e) => {
+        let setDateButtonEventListener = document.getElementById("tasks-menu");
+        /*let eventFunction = (e) => {
             let input = e.target.value
             let projId = e.target.className
             let taskId = e.target.id
@@ -436,10 +451,19 @@ export default class DOM {
             console.log("change TEST")
             console.log(e.target.value)
             DOM.setTaskDate(projId, taskId, input);
-        }
-        setDateButton.addEventListener("change", eventFunction)
-        var teste = setDateButton.addEventListener("change", eventFunction)
-        console.log(teste)
+        }*/
+        setDateButtonEventListener.addEventListener("change", (e) => {
+            let input = e.target.value
+            let projId = e.target.className
+            let taskId = e.target.id
+            if(e.target.type == "date" && e.target.value == "") return;
+            if(e.target.type != "date") return;
+            console.log("change TEST")
+            console.log(e.target.value)
+            DOM.setTaskDate(projId, taskId, input);
+        })
+        // var teste = setDateButtonEventListener.addEventListener("change", eventFunction)
+        // console.log(teste)
     }
 
    /* static eraseDate() {

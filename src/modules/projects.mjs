@@ -12,16 +12,17 @@ function protoMethods() {
         setDesc(input){this.description = input},
         setTask(name, date, status){this.tasks.push(newTask(name, date, status))},
         deleteTask(taskIndex){this.tasks.splice(taskIndex,1)},
+        deleteTodayArrTask(taskIndex){this.todayArr.splice(taskIndex,1)},
         deleteAllTasks(){this.tasks = []},
-        isToday() {
-            for(let x = 0; x < this.tasks.length; x++) { 
-                console.log("IS TODAY TESTE")
-                if(this.tasks[x].dueDate === today) {
-                    this.tasks[x].setNote(`${this.name}`);
-                    this.todayArr.push(this.tasks[x]);
+        isToday(taskIndex) {
+            //for(let x = 0; x < this.tasks.length; x++) { 
+              //  console.log("IS TODAY TESTE")
+                if(this.tasks[taskIndex].dueDate === today) {
+                    this.tasks[taskIndex].setNote(`${this.name}`);
+                    this.todayArr.push(this.tasks[taskIndex]);
                     let todoList = Storage.getTodoList();
-                    todoList.projects[0].tasks.push(this.tasks[x]);
-                    Storage.saveTodoList(todoList)}}}
+                    todoList.projects[0].tasks.push(this.tasks[taskIndex]);
+                    Storage.saveTodoList(todoList)}}
     };
     return protoMethods;
 }
