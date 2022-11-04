@@ -12,7 +12,7 @@ function protoMethods(){
     return protoMethods
 }
 
-export default function newTask(name, date, status, note, level) {
+export default function newTask(name, status, note, date, level) {
     var task = {
         name: name,
         done: status,

@@ -29,8 +29,9 @@ export default class Storage {
             newProjectArr.push(projObjWithMethods)
         }
 
-        console.log(newProjectArr)
-        return newProjectArr
+        todoList.projects = newProjectArr
+        console.log(todoList)
+        return todoList
     }
 
     static addProject(project) {

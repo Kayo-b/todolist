@@ -64,11 +64,23 @@ export default class DOM {
         DOM.taskCheck();
         DOM.deleteTaskButton();
         DOM.setDateButton();
+        DOM.checkIfDueDateIsToday();
         //DOM.eraseDate();
         //Storage.addMethodsToProjectsInTodoList();
     }
         
-    
+    static checkIfDueDateIsToday() {
+        let todoList = Storage.addMethodsToProjectsInTodoList();
+        let projects = todoList.projects;
+        for(let x = 0; x < projects.length; x++){
+            let tasks = projects[x].tasks;
+            for(let i = 0; i < tasks.length; i++){
+                projects[x].isToday(i)
+            }
+            
+        }
+
+    }
     //Create Content
 
     static openProject(projName) {
@@ -224,7 +236,7 @@ export default class DOM {
 
         var indexOfTargetId = DOM.getIndexOfProject(objId)
         var newObj = DOM.assignMethodsToProjectObj(objId);
-        newObj.setTask(taskName, null, false, "")
+        newObj.setTask(taskName, false, "")
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
         DOM.removeInnerHTML("tasks-menu");
@@ -258,6 +270,23 @@ export default class DOM {
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
             let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);//changed
             projObj.tasks[indexOfTask].setStatus(true)
+            //Checking tasks that are shared between target project and "Today" projects
+            if(projObj.tasks[indexOfTask].note != ""){
+                if(projObj.name == "Today"){
+                    let todoList = Storage.addMethodsToProjectsInTodoList();
+                    let projID = projObj.tasks[indexOfTask].note
+                    let indexOfProj = DOM.getIndexOfProject(projID)
+                    let originProj = todoList.projects[indexOfProj]
+                    let originTaskIndex = DOM.getIndexOfTask(projID, e.target.id)
+                    originProj.tasks[originTaskIndex].setStatus(true)
+                    DOM.substituteProjectFromTodoList(indexOfProj, originProj);
+                }
+                    let todoList = Storage.addMethodsToProjectsInTodoList();
+                    let todayProj = todoList.projects[0]
+                    let todayTaskIndex = DOM.getIndexOfTask("Today", e.target.id)
+                    todayProj.tasks[todayTaskIndex].setStatus(true)
+                    DOM.substituteProjectFromTodoList(0, todayProj);
+            }
             DOM.substituteProjectFromTodoList(projIndex, projObj);
             DOM.removeInnerHTML("tasks-menu");
             DOM.loadTaskList(e.target.className);
@@ -275,7 +304,22 @@ export default class DOM {
             let projObj = DOM.assignMethodsToProjectObj(projName);
             if(projObj.tasks[taskIndex].note != ""){
                 let todayArrIndex = DOM.getIndexOfTodayArrTask(projName, e.target.id);
-                projObj.deleteTodayArrTask(todayArrIndex)
+                projObj.deleteTodayArrTask(todayArrIndex);
+                //Deleting tasks that are shared between target project and "Today" projects
+                if(projObj.name == "Today"){
+                    let todoList = Storage.addMethodsToProjectsInTodoList();
+                    let projID = projObj.tasks[taskIndex].note
+                    let indexOfProj = DOM.getIndexOfProject(projID)
+                    let originProj = todoList.projects[indexOfProj]
+                    let originTaskIndex = DOM.getIndexOfTask(projID, e.target.id)
+                    originProj.deleteTask(originTaskIndex)
+                    DOM.substituteProjectFromTodoList(indexOfProj, originProj);
+                }
+                    let todoList = Storage.addMethodsToProjectsInTodoList();
+                    let todayProj = todoList.projects[0]
+                    let todayTaskIndex = DOM.getIndexOfTask("Today", e.target.id)
+                    todayProj.deleteTask(todayTaskIndex)
+                    DOM.substituteProjectFromTodoList(0, todayProj);
             }
             projObj.deleteTask(taskIndex);
             e.target.parentNode.remove()
@@ -375,11 +419,22 @@ export default class DOM {
 
     static deleteProjectObj(projId) {
         var projIndex = DOM.getIndexOfProject(projId)
+        DOM.delAllTasks(projId)
         Storage.deleteProject(projIndex);
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
     }
 
+    static delAllTasks(projId) {
+        let todoList = Storage.addMethodsToProjectsInTodoList();
+        let todayProj = todoList.projects[0];
+        for(let x = 0; x < todayProj.tasks.length; x++){
+            if(todayProj.tasks[x].note == projId){
+                todayProj.deleteTask(x);
+            }
+        }
+        DOM.substituteProjectFromTodoList(0, todayProj)
+    }
     //Deletes second simbling = removes project from list and from localStorage
     static deleteProjectButton() {
         var deleteButtonTeste = document.getElementById("delButtonTeste");

@@ -10,7 +10,7 @@ function protoMethods() {
         setName(input){this.name = input},
         getName(){return this.name},
         setDesc(input){this.description = input},
-        setTask(name, date, status){this.tasks.push(newTask(name, date, status))},
+        setTask(name, status, note){this.tasks.push(newTask(name, status, note))},
         deleteTask(taskIndex){this.tasks.splice(taskIndex,1)},
         deleteTodayArrTask(taskIndex){this.todayArr.splice(taskIndex,1)},
         deleteAllTasks(){this.tasks = []},
