@@ -30,11 +30,6 @@ export default class TodoList {
         this.projects = [];
     }
 
-    // deleteTask(projIndex, taskIndex) {
-    //     //this.projects[projIndex].deleteTask(taskIndex)
-    //     console.log(this.projects[projIndex])
-    // }
-
     todayTask() {
         for(let x = 0; x < this.projects.length; x++) {
             for(let y = 0; y < this.projects[x].todayArr.length; y++) {              

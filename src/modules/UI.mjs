@@ -24,9 +24,17 @@ export default class DOM {
         let todoList = Storage.getTodoList()
         todoList = todoList.projects
         let projectsList = document.getElementById("projList");
-        let showNameFunc = (item) => projectsList.innerHTML += `
+        let showNameFunc = (item) => {
+        if(item.name != "Today") {
+        projectsList.innerHTML += `
         <div id="${item.name}" class="projListingClass">${item.name}
         <button id="${item.name} edit" class="editButton">EDIT</button></div>`
+    }
+        else if(item.name == "Today"){
+            projectsList.innerHTML += `
+            <div id="${item.name}" class="projListingClass">${item.name}`
+        }
+    }
         todoList.forEach(showNameFunc)
         DOM.selectProjOnClick();
     }
@@ -40,16 +48,18 @@ export default class DOM {
         //DOM.showProjNameInTaskList(projName)
         projectList.innerHTML = `${projName}<div id="tasks-menu">
           </div>`
-        projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)
+        if(projName != "Today"){
+            projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)    
+        }
+        
         let tasksMenu = document.getElementById("tasks-menu");
         let showTasks = (item) => {
-            console.log("SHOWTASK TEST")
             if(item.done === true) {
                 tasksMenu.innerHTML += `
                 <div id="${item.name}" class="${projName}"><s>${item.name}</s>
                 <button id="${item.name}" class="taskDeleteButton">X</button></div>`
     }
-            if(item.dueDate == null && item.done == false){
+            if(item.dueDate == null && item.done == false) {
                 tasksMenu.innerHTML += `
                 <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
                 <input type="date" id="${item.name}" class="${projName}" min="2018-01-01" max="2030-12-31">`}
@@ -65,6 +75,8 @@ export default class DOM {
         DOM.deleteTaskButton();
         DOM.setDateButton();
         DOM.checkIfDueDateIsToday();
+        //DOM.createTaskButton();
+        //DOM.checkIfDueDateIsToday();
         //DOM.eraseDate();
         //Storage.addMethodsToProjectsInTodoList();
     }
@@ -77,6 +89,8 @@ export default class DOM {
             for(let i = 0; i < tasks.length; i++){
                 projects[x].isToday(i)
             }
+            let projIndex = DOM.getIndexOfProject(projects[x])
+            DOM.substituteProjectFromTodoList(projIndex, projects[x])
             
         }
 
@@ -102,6 +116,11 @@ export default class DOM {
 
         DOM.confirmNewProj();
         DOM.hideButton("addproject", "yes")
+    }
+
+    static cancelCreateProject() {
+        let cancelButton = document.getElementById("cancelButton")
+        cancelButton.addEventListener()
     }
 
     static projectName(name) {
@@ -155,7 +174,8 @@ export default class DOM {
 
     static inputField(targetId) {
         let projectsList = document.getElementById(`${targetId}`);
-        projectsList.innerHTML = `<div id="inputElement">
+        projectsList.innerHTML = `
+        <div id="inputElement">
         <input type="text" id="${targetId}" placeholder="Project Name" value="${targetId}">
         <input type="submit" id="okEditButton" value="Save">
         <input type="submit" id="delButtonTeste" value="Delete"></div>`;
@@ -189,6 +209,7 @@ export default class DOM {
         DOM.showProjNameInTaskList(`${projName}`);
         DOM.openProject(projName);
         DOM.taskInput(projName);   
+        //DOM.createTaskButton();
         //DOM.addTaskButton();
         //DOM.loadTaskList(projName);
         
@@ -244,6 +265,9 @@ export default class DOM {
         DOM.removeInnerHTML("tasks-menu");
         DOM.loadTaskList(objId);
         DOM.hideButton("addtask", "no");
+        //DOM.taskInput(objId);  
+        DOM.openProject(objId)
+        DOM.createTaskButton(); 
         //DOM.setDateButton();
         
 
@@ -254,7 +278,7 @@ export default class DOM {
         let newObj = DOM.assignMethodsToProjectObj(projId);
         let taskIndex = DOM.getIndexOfTask(projId, taskId);
         newObj.tasks[taskIndex].setDate(input);
-        console.log("SET TASK DATE")
+        
         newObj.isToday(taskIndex);
         DOM.substituteProjectFromTodoList(projIndex, newObj);
 
@@ -266,7 +290,6 @@ export default class DOM {
         checkbox.addEventListener("change", (e) => {
             if(e.target.type != "checkbox") return
             let projIndex = DOM.getIndexOfProject(e.target.className)
-            console.log("CHECKBOX CHANGE")
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
             let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);//changed
             projObj.tasks[indexOfTask].setStatus(true)
@@ -471,6 +494,7 @@ export default class DOM {
             taskListValue.value = e.target.id;
             DOM.showProjNameInTaskList(`${e.target.id}`)
             DOM.openProject(e.target.id);
+            if(e.target.id == "Today") return
             DOM.createTaskButton();
             // DOM.taskCheck(e.target.id);
             // DOM.assignMethodsToProjectObj(e.target.id);
@@ -486,11 +510,13 @@ export default class DOM {
 
         taskInputButton.addEventListener("click", function() {
             DOM.addTask(projectName(), inputValue())
-            ;});
+        });
     }
 
     static createTaskButton() {
-        let projName = document.getElementById("tasksList").value;
+        let projName = document.getElementById("taskList").firstChild.className;
+        console.log("PROJ NAME: !!!")
+        console.log(projName)
         var createButton = document.getElementById("addtask");
         createButton.addEventListener("click", () => DOM.taskInput(projName))
     }
@@ -503,8 +529,6 @@ export default class DOM {
             let taskId = e.target.id
             if(e.target.type == "date" && e.target.value == "") return;
             if(e.target.type != "date") return;
-            console.log("change TEST")
-            console.log(e.target.value)
             DOM.setTaskDate(projId, taskId, input);
         }*/
         setDateButtonEventListener.addEventListener("change", (e) => {
@@ -513,12 +537,9 @@ export default class DOM {
             let taskId = e.target.id
             if(e.target.type == "date" && e.target.value == "") return;
             if(e.target.type != "date") return;
-            console.log("change TEST")
-            console.log(e.target.value)
             DOM.setTaskDate(projId, taskId, input);
         })
         // var teste = setDateButtonEventListener.addEventListener("change", eventFunction)
-        // console.log(teste)
     }
 
    /* static eraseDate() {

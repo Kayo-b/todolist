@@ -16,13 +16,13 @@ function protoMethods() {
         deleteAllTasks(){this.tasks = []},
         isToday(taskIndex) {
             //for(let x = 0; x < this.tasks.length; x++) { 
-              //  console.log("IS TODAY TESTE")
-                if(this.tasks[taskIndex].dueDate === today) {
+                if(this.tasks[taskIndex].dueDate === today && this.tasks[taskIndex].note == "") {
                     this.tasks[taskIndex].setNote(`${this.name}`);
                     this.todayArr.push(this.tasks[taskIndex]);
                     let todoList = Storage.getTodoList();
                     todoList.projects[0].tasks.push(this.tasks[taskIndex]);
-                    Storage.saveTodoList(todoList)}}
+                    Storage.saveTodoList(todoList)}
+                return}
     };
     return protoMethods;
 }
@@ -33,7 +33,7 @@ export default function createProject(name, desc) {
         description: desc,
         tasks: [],
         todayArr:[],
-        methodTest(input){console.log("method test" + `${input}`)},
+        //methodTest(input){console.log("method test" + `${input}`)},
         __proto__: protoMethods()
 
     }

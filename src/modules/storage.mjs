@@ -30,7 +30,6 @@ export default class Storage {
         }
 
         todoList.projects = newProjectArr
-        console.log(todoList)
         return todoList
     }
 
