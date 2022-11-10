@@ -98,12 +98,16 @@ export default class DOM {
         <input type="submit" id="okButton" value="Ok">
         <input type="submit" id="cancelButton" value="Cancel"></div>`
         DOM.confirmNewProj();
+        DOM.cancelCreateProject();
         DOM.hideButton("addproject", "yes")
     }
 
     static cancelCreateProject() {
         let cancelButton = document.getElementById("cancelButton")
-        cancelButton.addEventListener()
+        let inputElement = document.getElementById("inputElement")
+        cancelButton.addEventListener("click", () => inputElement.remove())
+        cancelButton.addEventListener("click", () => DOM.hideButton("addproject", "no"))
+
     }
 
     static projectName(name) {
@@ -145,7 +149,9 @@ export default class DOM {
            target.style.display = "none"
         }
         else if(hide == "no") {
-            target.style.display = "block"
+            target.style.display = "block";
+            console.log("teste hide button")
+            console.log(target.style.display)
         }
     }
 
