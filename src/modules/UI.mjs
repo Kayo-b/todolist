@@ -14,9 +14,6 @@ export default class DOM {
         DOM.getTargetId();
         DOM.createProjObject();
         DOM.loadTodoList();
-        //DOM.taskCheck();
-        //DOM.deleteTaskButton();
-        //DOM.setDateButton();
     }
 
     /*Gets todoList from localStorage and renders it on the page */
@@ -25,12 +22,12 @@ export default class DOM {
         todoList = todoList.projects
         let projectsList = document.getElementById("projList");
         let showNameFunc = (item) => {
-        if(item.name != "Today") {
+        if(item.name != "Tasks due for today") {
         projectsList.innerHTML += `
         <div id="${item.name}" class="projListingClass">${item.name}
-        <button id="${item.name} edit" class="editButton">EDIT</button></div>`
+        <div id="${item.name} edit" class="editButton"></div></div>`
     }
-        else if(item.name == "Today"){
+        else if(item.name == "Tasks due for today"){
             projectsList.innerHTML += `
             <div id="${item.name}" class="projListingClass">${item.name}`
         }
@@ -45,10 +42,9 @@ export default class DOM {
         let projIndex = DOM.getIndexOfProject(projName);
         let projectTasks = todoList[projIndex].tasks;
         let projectList = document.getElementById("tasksList");
-        //DOM.showProjNameInTaskList(projName)
         projectList.innerHTML = `${projName}<div id="tasks-menu">
           </div>`
-        if(projName != "Today"){
+        if(projName != "Tasks due for today"){
             projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)    
         }
         
@@ -69,16 +65,11 @@ export default class DOM {
                 <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
                 <input type="date" id="${item.name}" class="${projName}" value="${item.dueDate}" min="2018-01-01" max="2030-12-31">`    
             }
-        //DOM.removeInnerHTML(tasksMenu);
         projectTasks.forEach(showTasks);
         DOM.taskCheck();
         DOM.deleteTaskButton();
         DOM.setDateButton();
         DOM.checkIfDueDateIsToday();
-        //DOM.createTaskButton();
-        //DOM.checkIfDueDateIsToday();
-        //DOM.eraseDate();
-        //Storage.addMethodsToProjectsInTodoList();
     }
         
     static checkIfDueDateIsToday() {
@@ -90,20 +81,13 @@ export default class DOM {
                 projects[x].isToday(i)
             }
             let projIndex = DOM.getIndexOfProject(projects[x])
-            DOM.substituteProjectFromTodoList(projIndex, projects[x])
-            
+            DOM.substituteProjectFromTodoList(projIndex, projects[x])    
         }
-
     }
     //Create Content
 
     static openProject(projName) {
-        /*let projectList = document.getElementById("tasksList");
-        projectList.innerHTML += `<div id="tasks-menu">
-          </div>`
-        projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)*/
         DOM.loadTaskList(projName);
-    
     }
 
 
@@ -113,7 +97,6 @@ export default class DOM {
         <input type="text" id="projname" placeholder="Project Name">
         <input type="submit" id="okButton" value="Ok">
         <input type="submit" id="cancelButton" value="Cancel"></div>`
-
         DOM.confirmNewProj();
         DOM.hideButton("addproject", "yes")
     }
@@ -126,8 +109,7 @@ export default class DOM {
     static projectName(name) {
         let projectsList = document.getElementById("projList");
         projectsList.innerHTML += `<div id="${name}" class="projListingClass">${name} 
-        <button ="${name}edit" class="editButton"><b>EDIT</b></button></div>`
-        
+        <div>class="editButton"</div></div>`       
     }
 
     static taskInput(projName) {
@@ -148,16 +130,13 @@ export default class DOM {
 
         let target = document.getElementById(value);
         target.remove()
-
     }
 
     static removeInnerHTML(value) {
 
         let target = document.getElementById(value);
         target.innerHTML = ""
-
     }
-
 
     static hideButton(targetId, hide) {
         let target = document.getElementById(targetId);
@@ -168,8 +147,6 @@ export default class DOM {
         else if(hide == "no") {
             target.style.display = "block"
         }
-
-
     }
 
     static inputField(targetId) {
@@ -183,10 +160,6 @@ export default class DOM {
 
     }
 
-    // static setDateInputField(projID) {
-    //     let taskList = document.getElementById("taskList");
-
-    // }
     // Event Listeners
 
     static newProject() {
@@ -205,14 +178,9 @@ export default class DOM {
         DOM.removeDiv("inputElement")
         DOM.removeInnerHTML("projList")
         DOM.loadTodoList();
-        //DOM.projectName(projName);
         DOM.showProjNameInTaskList(`${projName}`);
         DOM.openProject(projName);
         DOM.taskInput(projName);   
-        //DOM.createTaskButton();
-        //DOM.addTaskButton();
-        //DOM.loadTaskList(projName);
-        
 
     }
 
@@ -243,15 +211,32 @@ export default class DOM {
     static changeObjName(targetId, newName) {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
         var newObjProj = DOM.assignMethodsToProjectObj(targetId);
+        let todayObj = DOM.assignMethodsToProjectObj("Tasks due for today");
+        console.log(todayObj)
         newObjProj.setName(newName)
+        for(let x = 0; x < newObjProj.tasks.length; x++){
+            newObjProj.tasks[x].setNote(newName)
+            if(todayObj.tasks.length > 0){
+                if(todayObj.tasks[x].note == targetId){
+                    todayObj.tasks[x].setNote(newName)
+                }
+            }
+        }
         DOM.substituteProjectFromTodoList(indexOfTargetId, newObjProj)
+        DOM.substituteProjectFromTodoList(0, todayObj)
         DOM.removeInnerHTML("projList");
         DOM.loadTodoList();
+        DOM.openProject(newName);
+        DOM.createTaskButton(newName);
         
     }
 
+
+
     //Action that occurs after the "Add" button is pressed
     static addTask(objId, taskName) {
+        console.log("OBJ NAME FROM ADD TASK")
+        console.log(objId)
         if(taskName == "") return alert("please insert a task name");
         else if(DOM.getIndexOfTask(objId, taskName) >= 0) return alert("task already listed");
 
@@ -265,10 +250,8 @@ export default class DOM {
         DOM.removeInnerHTML("tasks-menu");
         DOM.loadTaskList(objId);
         DOM.hideButton("addtask", "no");
-        //DOM.taskInput(objId);  
         DOM.openProject(objId)
-        DOM.createTaskButton(); 
-        //DOM.setDateButton();
+        DOM.createTaskButton(objId); 
         
 
     }
@@ -291,11 +274,11 @@ export default class DOM {
             if(e.target.type != "checkbox") return
             let projIndex = DOM.getIndexOfProject(e.target.className)
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
-            let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);//changed
+            let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);
             projObj.tasks[indexOfTask].setStatus(true)
-            //Checking tasks that are shared between target project and "Today" projects
+            //Checking tasks that are shared between target project and "Tasks due for today" projects
             if(projObj.tasks[indexOfTask].note != ""){
-                if(projObj.name == "Today"){
+                if(projObj.name == "Tasks due for today"){
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let projID = projObj.tasks[indexOfTask].note
                     let indexOfProj = DOM.getIndexOfProject(projID)
@@ -306,7 +289,7 @@ export default class DOM {
                 }
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let todayProj = todoList.projects[0]
-                    let todayTaskIndex = DOM.getIndexOfTask("Today", e.target.id)
+                    let todayTaskIndex = DOM.getIndexOfTask("Tasks due for today", e.target.id)
                     todayProj.tasks[todayTaskIndex].setStatus(true)
                     DOM.substituteProjectFromTodoList(0, todayProj);
             }
@@ -328,8 +311,8 @@ export default class DOM {
             if(projObj.tasks[taskIndex].note != ""){
                 let todayArrIndex = DOM.getIndexOfTodayArrTask(projName, e.target.id);
                 projObj.deleteTodayArrTask(todayArrIndex);
-                //Deleting tasks that are shared between target project and "Today" projects
-                if(projObj.name == "Today"){
+                //Deleting tasks that are shared between target project and "Tasks due for today" projects
+                if(projObj.name == "Tasks due for today"){
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let projID = projObj.tasks[taskIndex].note
                     let indexOfProj = DOM.getIndexOfProject(projID)
@@ -340,7 +323,7 @@ export default class DOM {
                 }
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let todayProj = todoList.projects[0]
-                    let todayTaskIndex = DOM.getIndexOfTask("Today", e.target.id)
+                    let todayTaskIndex = DOM.getIndexOfTask("Tasks due for today", e.target.id)
                     todayProj.deleteTask(todayTaskIndex)
                     DOM.substituteProjectFromTodoList(0, todayProj);
             }
@@ -474,15 +457,9 @@ export default class DOM {
             if(e.target.className == "editButton"){ 
                 let targetId = e.target.parentNode.id;
                 DOM.inputField(targetId)};
-            
-            // if(e.target.className == "setDate"){
-            //     let targetId = e.target.previousElementSibling.className;
-                
-            // }
         })
            
     }
-
 
 
     static selectProjOnClick() {
@@ -490,15 +467,14 @@ export default class DOM {
         let clickOnProject = document.getElementById("projList")
         clickOnProject.addEventListener("click", (e) => {
             if(e.target.className != "projListingClass") return
-
-            taskListValue.value = e.target.id;
+            if(e.target.id == "Tasks due for today"){
+                DOM.showProjNameInTaskList(`${e.target.id}`)
+                DOM.openProject(e.target.id);
+                return
+            }
             DOM.showProjNameInTaskList(`${e.target.id}`)
             DOM.openProject(e.target.id);
-            if(e.target.id == "Today") return
-            DOM.createTaskButton();
-            // DOM.taskCheck(e.target.id);
-            // DOM.assignMethodsToProjectObj(e.target.id);
-            //DOM.setDateButton();
+            DOM.createTaskButton(e.target.id);
             });
     }
 
@@ -506,31 +482,21 @@ export default class DOM {
         var taskInputButton = document.getElementById("addTaskButton123");
         var taskInputField = document.getElementById("tasksInputField");
         var inputValue = DOM.returnPrevElemSiblingValue(taskInputButton);
-        var projectName = DOM.returnChildNodeId(taskInputField)
-
+        var projectName = taskInputButton.previousElementSibling.id
+        console.log("new projname")
+        console.log(projectName)
         taskInputButton.addEventListener("click", function() {
-            DOM.addTask(projectName(), inputValue())
+            DOM.addTask(projectName, inputValue())
         });
     }
 
-    static createTaskButton() {
-        let projName = document.getElementById("taskList").firstChild.className;
-        console.log("PROJ NAME: !!!")
-        console.log(projName)
+    static createTaskButton(projName) {
         var createButton = document.getElementById("addtask");
         createButton.addEventListener("click", () => DOM.taskInput(projName))
     }
 
     static setDateButton() {
         let setDateButtonEventListener = document.getElementById("tasks-menu");
-        /*let eventFunction = (e) => {
-            let input = e.target.value
-            let projId = e.target.className
-            let taskId = e.target.id
-            if(e.target.type == "date" && e.target.value == "") return;
-            if(e.target.type != "date") return;
-            DOM.setTaskDate(projId, taskId, input);
-        }*/
         setDateButtonEventListener.addEventListener("change", (e) => {
             let input = e.target.value
             let projId = e.target.className
@@ -539,25 +505,6 @@ export default class DOM {
             if(e.target.type != "date") return;
             DOM.setTaskDate(projId, taskId, input);
         })
-        // var teste = setDateButtonEventListener.addEventListener("change", eventFunction)
     }
-
-   /* static eraseDate() {
-        let setDateButton = document.getElementById("tasks-menu");
-        setDateButton.addEventListener("click", (e) => {
-            if(e.target.type != "date") return
-            if(e.target.value == "" || e.target.value == undefined || e.target.value == null) return
-            console.log("CLICK TEST")
-            console.log(e.target.value)
-            //checkDateContent(e)
-            let projId = e.target.className
-            let taskId = e.target.id
-            DOM.setTaskDate(projId, taskId, "");
-
-        })
-        //let checkDateContent = function(ev){console.log("E TARGET  VALUE TESTE"), console.log(ev.target.value)}
-
-        //setDateButton.addEventListener("click", (e) => checkDateContent(e))
-    }*/
 
 }

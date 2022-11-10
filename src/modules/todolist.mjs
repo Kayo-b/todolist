@@ -5,7 +5,7 @@ import createProject from "./projects.mjs"
 export default class TodoList {
     constructor() {
         this.projects = [];
-        this.projects.push(createProject("Today","desc teste"));
+        this.projects.push(createProject("Tasks due for today","desc teste"));
 
     }
 

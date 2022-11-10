@@ -19,9 +19,11 @@
 
 #mainContainer>#nav{
   height: 100%;
-  width: auto;
+  width: 800px;
   display:flex;
-  border: 1px solid rgb(16, 82, 130);
+  border-top: 1px solid rgb(16, 82, 130);
+  border-bottom: 1px solid rgb(16, 82, 130);
+  border-left:  1px solid rgb(16, 82, 130);
   /* align-items: center; */
   justify-content:start;
   flex-direction: row;
@@ -44,7 +46,7 @@
 }
 
 #projectsDiv, #tasksList {
-  border-right: 1px solid rgb(16, 82, 130);
+  border-right: 2px solid rgb(16, 82, 130);
   height:800px;
   width:400px;
   align-items: center;
@@ -58,15 +60,12 @@ h3 {
   margin:0px;
   padding:0px;
 }
-/* 
-#projList, #tasksList {
-  display: flex;
-  height:800px;
-  width:400px;
-  flex-direction: column;
-  align-items: center;
 
-} */
+#projList{
+  display: flex;
+  width: 100%;
+  align-items:flex-start;
+}
 
 #projname, #taskname{
   font-size:14pt;
@@ -78,4 +77,44 @@ h3 {
   font-size:12pt;
   height:30px;
   width:30px;
+}
+
+.projListingClass{
+  border-radius: 1px;
+  border: 1px solid transparent;
+  display: flex;
+  align-items:flex-start;
+  width:99.6%;
+  
+
+}
+.projListingClass:hover{
+  background-color: lightgray;
+  cursor: pointer;
+  
+}
+
+.editButton{
+  width: 17px;
+  height: 17px;
+  background-size: 17px 17px;
+  margin-top:2px;
+  margin-left: 6px;
+}
+
+
+.projListingClass:hover .editButton{
+  background: url(edit.svg);
+  width: 17px;
+  height: 17px;
+  background-size: 17px 17px;
+  margin-top:2px;
+  margin-left: 6px;
+  
+}
+
+.editButton:hover{
+
+  transform: scale(1.2);
+  filter:invert(30%)
 }
