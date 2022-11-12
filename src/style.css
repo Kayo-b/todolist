@@ -118,3 +118,27 @@ h3 {
   transform: scale(1.2);
   filter:invert(30%)
 }
+
+input[type="date"] {
+    border: 0px;
+    color: rgb(115, 112, 112);
+    size: 80px;
+    padding-right:-10px
+    
+}
+
+input[type="date"]:hover {
+  background-color: lightgray;
+  cursor: pointer;
+
+}
+
+#taskList {
+  display: flex;
+  width: 400px;
+}
+
+#taskList > input[type="date"] {
+  margin-left: auto;
+  
+}

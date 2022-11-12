@@ -98,8 +98,14 @@ export default class DOM {
         <input type="submit" id="okButton" value="Ok">
         <input type="submit" id="cancelButton" value="Cancel"></div>`
         DOM.confirmNewProj();
+        DOM.enterKeyInputField();
         DOM.cancelCreateProject();
         DOM.hideButton("addproject", "yes")
+    }
+
+    static enterKeyInputField() {
+        let inputField = document.getElementById("projname");
+        inputField.addEventListener("keypress", (e) => {if(e.key === "Enter") DOM.createProjObject()})
     }
 
     static cancelCreateProject() {
@@ -195,6 +201,11 @@ export default class DOM {
         okButton.addEventListener("click", DOM.createProjObject);  
     }
 
+    // static confirmNewProjEnterKey(e) {
+    //     console.log(e.key)
+    //     if(e.key === "Enter") DOM.createProjObject()
+    // }
+
     static getIndexOfProject(projID) {
         var getTodoList = Storage.getTodoList();
         var indexOfTargetId = getTodoList.projects.map(x => x.name).indexOf(`${projID}`);
@@ -272,7 +283,7 @@ export default class DOM {
         DOM.substituteProjectFromTodoList(projIndex, newObj);
 
         
-    }
+    }f
 
     static taskCheck() {
         let checkbox = document.getElementById("tasks-menu")
@@ -336,6 +347,9 @@ export default class DOM {
             projObj.deleteTask(taskIndex);
             e.target.parentNode.remove()
             DOM.substituteProjectFromTodoList(objectIndex, projObj);
+            DOM.loadTaskList(projName)
+            DOM.createTaskButton(projName);
+            
         })
 
     }
@@ -493,9 +507,14 @@ export default class DOM {
         console.log(projectName)
         taskInputButton.addEventListener("click", function() {
             DOM.addTask(projectName, inputValue())
-        });
-    }
+        })
+        taskInputField.addEventListener("keypress", (e) => DOM.taskInputButtonEnterKey(e, projectName, inputValue()))
 
+        
+    }
+    static taskInputButtonEnterKey(e, projectName, inputValue) {
+        if(e.key === "Enter") DOM.addTask(projectName, inputValue)
+    }
     static createTaskButton(projName) {
         var createButton = document.getElementById("addtask");
         createButton.addEventListener("click", () => DOM.taskInput(projName))
@@ -509,6 +528,7 @@ export default class DOM {
             let taskId = e.target.id
             if(e.target.type == "date" && e.target.value == "") return;
             if(e.target.type != "date") return;
+            e.target.innerHTML = "readonly"
             DOM.setTaskDate(projId, taskId, input);
         })
     }
