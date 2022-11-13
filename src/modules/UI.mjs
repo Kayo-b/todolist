@@ -125,7 +125,7 @@ export default class DOM {
     static taskInput(projName) {
         let taskInput = document.getElementById("tasks-menu");
         taskInput.insertAdjacentHTML("beforeend", `<div id="tasksInputField"> 
-        <input type="text" id="${projName}" placeholder="Task Name">
+        <input type="text" id="${projName}"  autofocus="autofocus" placeholder="Task Name">
         <input type="submit" id="addTaskButton123" value="Add"></div>`)
         DOM.hideButton("addtask", "yes")
         DOM.addTaskButton();
