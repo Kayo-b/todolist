@@ -41,7 +41,6 @@
 
 #tasksInputField {
   display: flex;
-  flex-direction: column;
   justify-content:start;
 }
 
@@ -141,4 +140,43 @@ input[type="date"]:hover {
 #taskList > input[type="date"] {
   margin-left: auto;
   
+}
+
+#addproject, #addtask, #addTaskButton123 {
+  background: url(add.svg);
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
+  margin-top:2px;
+  margin-left: 6px;
+  border: 0px;
+  cursor: pointer;
+  filter: brightness(0) invert(0.7);
+
+}
+
+#addproject:hover {
+  transform: scale(1.2);
+  filter: brightness(1) invert(1);
+}
+
+#cancelAddTask:hover {
+  transform: scale(1.2);
+  filter: brightness(1) invert(1);
+}
+
+#addTaskButton123:hover {
+  transform: scale(1.2);
+  filter: brightness(1) invert(1);
+}
+#cancelAddTask {
+  background: url(remove.svg);
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
+  margin-top:2px;
+  margin-left: 6px;
+  border: 0px;
+  cursor: pointer;
+  filter: brightness(0) invert(0.7);
 }

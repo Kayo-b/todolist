@@ -45,7 +45,7 @@ export default class DOM {
         projectList.innerHTML = `${projName}<div id="tasks-menu">
           </div>`
         if(projName != "Tasks due for today"){
-            projectList.insertAdjacentHTML("beforeend", `<button id="addtask"><b>+ Add Task</b></button>`)    
+            projectList.insertAdjacentHTML("beforeend", `<button id="addtask"></button>`)    
         }
         
         let tasksMenu = document.getElementById("tasks-menu");
@@ -125,11 +125,14 @@ export default class DOM {
     static taskInput(projName) {
         let taskInput = document.getElementById("tasks-menu");
         taskInput.insertAdjacentHTML("beforeend", `<div id="tasksInputField"> 
-        <input type="text" id="${projName}"  autofocus="autofocus" placeholder="Task Name">
-        <input type="submit" id="addTaskButton123" value="Add"></div>`)
+        <input type="text" id="${projName}" />
+        <input type="submit" id="addTaskButton123" value="+" />
+        <input type="submit" id="cancelAddTask" value="x" /></div>`)
         DOM.hideButton("addtask", "yes")
         DOM.addTaskButton();
+        DOM.cancelAddTask();
     }
+
 
     static showProjNameInTaskList(projName) {
         let projNameTaskList = document.getElementById("tasksList");
@@ -173,6 +176,14 @@ export default class DOM {
     }
 
     // Event Listeners
+
+    static cancelAddTask() {
+        let taskInptField = document.getElementById("tasksInputField");
+        let cancelAddTask = document.getElementById("cancelAddTask");
+        cancelAddTask.addEventListener("click", () => taskInptField.remove());
+        cancelAddTask.addEventListener("click", () => DOM.hideButton("addtask", "no"));
+        
+    }
 
     static newProject() {
         
@@ -499,21 +510,23 @@ export default class DOM {
     }
 
     static addTaskButton() {
-        var taskInputButton = document.getElementById("addTaskButton123");
-        var taskInputField = document.getElementById("tasksInputField");
-        var inputValue = DOM.returnPrevElemSiblingValue(taskInputButton);
-        var projectName = taskInputButton.previousElementSibling.id
-        console.log("new projname")
-        console.log(projectName)
+        let taskInputButton = document.getElementById("addTaskButton123");
+        let taskInputField = document.getElementById("tasksInputField");
+        let inputValue = DOM.returnPrevElemSiblingValue(taskInputButton);
+        let projectName = taskInputButton.previousElementSibling.id;
         taskInputButton.addEventListener("click", function() {
             DOM.addTask(projectName, inputValue())
         })
-        taskInputField.addEventListener("keypress", (e) => DOM.taskInputButtonEnterKey(e, projectName, inputValue()))
+        taskInputField.addEventListener("keypress", (e) => 
+        DOM.taskInputButtonEnterKey(e, projectName, inputValue()));
 
         
     }
     static taskInputButtonEnterKey(e, projectName, inputValue) {
+        let taskInputField = document.getElementById("tasksInputField");
         if(e.key === "Enter") DOM.addTask(projectName, inputValue)
+        else if(e.key === "Escape") console.log("TESTE ESC");
+        
     }
     static createTaskButton(projName) {
         var createButton = document.getElementById("addtask");
