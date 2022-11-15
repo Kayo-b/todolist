@@ -25,34 +25,34 @@
   border-bottom: 1px solid rgb(16, 82, 130);
   border-left:  1px solid rgb(16, 82, 130);
   /* align-items: center; */
-  justify-content:start;
+  justify-content:flex-start;
   flex-direction: row;
 }
 
 #tasks-menu, #projList {
   border-top: 1px solid rgb(16, 82, 130);
-  width:400px;
-  align-items: center;
-  text-align: center;
+  width:auto;
+  align-items: left;
+  text-align: left;
   display:flex;
   flex-direction:column;
-  justify-content: start;
+  justify-content:flex-start;
 }
 
 #tasksInputField {
   display: flex;
-  justify-content:start;
+  justify-content:flex-start;
 }
 
 #projectsDiv, #tasksList {
   border-right: 2px solid rgb(16, 82, 130);
   height:800px;
-  width:400px;
+  min-width: 150px;
   align-items: center;
   text-align: center;
   display:flex;
   flex-direction:column;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 h3 {
@@ -134,7 +134,7 @@ input[type="date"]:hover {
 
 #taskList {
   display: flex;
-  width: 400px;
+  width: auto;
 }
 
 #taskList > input[type="date"] {
@@ -142,7 +142,7 @@ input[type="date"]:hover {
   
 }
 
-#addproject, #addtask, #addTaskButton123 {
+#addproject, #addtask, #addTaskButton123, #okButton {
   background: url(add.svg);
   width: 20px;
   height: 20px;
@@ -160,8 +160,23 @@ input[type="date"]:hover {
   filter: brightness(1) invert(1);
 }
 
-#cancelAddTask:hover {
+#okButton:hover {
   transform: scale(1.2);
+  filter: brightness(1) invert(1);
+}
+
+#addtask:hover {
+  transform: scale(1.2);
+  filter: brightness(1) invert(1);
+}
+
+#cancelAddTask:hover {
+  transform: scale(1.33);
+  filter: brightness(1);
+}
+
+.taskDeleteButton:hover {
+  transform: scale(1.10);
   filter: brightness(1) invert(1);
 }
 
@@ -169,7 +184,7 @@ input[type="date"]:hover {
   transform: scale(1.2);
   filter: brightness(1) invert(1);
 }
-#cancelAddTask {
+#cancelAddTask, #cancelButton, #taskDeleteButton{
   background: url(remove.svg);
   width: 20px;
   height: 20px;
@@ -179,4 +194,64 @@ input[type="date"]:hover {
   border: 0px;
   cursor: pointer;
   filter: brightness(0) invert(0.7);
+  transform: scale(1.16)
+}
+
+.taskDeleteButton {
+  background: url(trash.svg);
+  width: 17px;
+  height: 17px;
+  background-size: 17px 17px;
+  margin-top:2px;
+  margin-left: 6px;
+  border: 0px;
+  cursor: pointer;
+  filter: brightness(0) invert(0.6);
+  transform: scale(1.0);
+  position:relative;
+  top:-5px;
+  right: 5px;
+}
+
+#okEditButton  {
+background: url(save.svg);
+width: 20px;
+height: 20px;
+background-size: 20px 20px;
+margin-top:2px;
+margin-left: 6px;
+border: 0px;
+cursor: pointer;
+filter: brightness(0) invert(0.7);
+transform: scale(1.1)
+}
+
+#okEditButton:hover {
+  transform: scale(1.2);
+  filter: brightness(1) invert(1);
+}
+
+#delButtonTeste {
+  background: url(trash.svg);
+  width: 17px;
+  height: 17px;
+  background-size: 17px 17px;
+  margin-top:2px;
+  margin-left: 6px;
+  border: 0px;
+  cursor: pointer;
+  filter: brightness(0) invert(0.6);
+  transform: scale(1.2);
+
+}
+
+#delButtonTeste:hover {
+  transform: scale(1.3);
+  filter: brightness(1) invert(1);
+}
+
+
+input[type="text"] {
+  width: 50px;
+  border-style: none;
 }

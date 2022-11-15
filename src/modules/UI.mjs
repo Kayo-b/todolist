@@ -53,7 +53,7 @@ export default class DOM {
             if(item.done === true) {
                 tasksMenu.innerHTML += `
                 <div id="${item.name}" class="${projName}"><s>${item.name}</s>
-                <button id="${item.name}" class="taskDeleteButton">X</button></div>`
+                <button id="${item.name}" class="taskDeleteButton" value=""></button></div>`
     }
             if(item.dueDate == null && item.done == false) {
                 tasksMenu.innerHTML += `
@@ -95,7 +95,7 @@ export default class DOM {
         let projectsList = document.getElementById("projList");
         projectsList.innerHTML += `<div id="inputElement">
         <input type="text" id="projname" placeholder="Project Name">
-        <input type="submit" id="okButton" value="Ok">
+        <input type="submit" id="okButton" value="">
         <input type="submit" id="cancelButton" value="Cancel"></div>`
         DOM.confirmNewProj();
         DOM.enterKeyInputField();
@@ -126,8 +126,8 @@ export default class DOM {
         let taskInput = document.getElementById("tasks-menu");
         taskInput.insertAdjacentHTML("beforeend", `<div id="tasksInputField"> 
         <input type="text" id="${projName}" />
-        <input type="submit" id="addTaskButton123" value="+" />
-        <input type="submit" id="cancelAddTask" value="x" /></div>`)
+        <input type="submit" id="addTaskButton123" value="" />
+        <input type="submit" id="cancelAddTask" value="" /></div>`)
         DOM.hideButton("addtask", "yes")
         DOM.addTaskButton();
         DOM.cancelAddTask();
@@ -169,8 +169,8 @@ export default class DOM {
         projectsList.innerHTML = `
         <div id="inputElement">
         <input type="text" id="${targetId}" placeholder="Project Name" value="${targetId}">
-        <input type="submit" id="okEditButton" value="Save">
-        <input type="submit" id="delButtonTeste" value="Delete"></div>`;
+        <input type="submit" id="okEditButton" value="">
+        <input type="submit" id="delButtonTeste" value=""></div>`;
         DOM.confirmUpdateProj(targetId)
 
     }
@@ -180,6 +180,10 @@ export default class DOM {
     static cancelAddTask() {
         let taskInptField = document.getElementById("tasksInputField");
         let cancelAddTask = document.getElementById("cancelAddTask");
+        let projId = taskInptField.children[0].id;
+        
+        cancelAddTask.addEventListener("click", () => DOM.loadTaskList(projId));
+        cancelAddTask.addEventListener("click", () => DOM.createTaskButton(projId));
         cancelAddTask.addEventListener("click", () => taskInptField.remove());
         cancelAddTask.addEventListener("click", () => DOM.hideButton("addtask", "no"));
         
@@ -209,7 +213,7 @@ export default class DOM {
 
     static confirmNewProj() {
         let okButton = document.getElementById("okButton");
-        okButton.addEventListener("click", DOM.createProjObject);  
+        okButton.addEventListener("click", DOM.createProjObject);
     }
 
     // static confirmNewProjEnterKey(e) {
@@ -324,6 +328,7 @@ export default class DOM {
             DOM.substituteProjectFromTodoList(projIndex, projObj);
             DOM.removeInnerHTML("tasks-menu");
             DOM.loadTaskList(e.target.className);
+            DOM.createTaskButton(e.target.className);
             
         })
     }
