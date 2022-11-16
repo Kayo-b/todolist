@@ -94,9 +94,7 @@ export default class DOM {
     static projectsNameInput() {
         let projectsList = document.getElementById("projList");
         projectsList.innerHTML += `<div id="inputElement">
-        <input type="text" id="projname" placeholder="Project Name">
-        <input type="submit" id="okButton" value="">
-        <input type="submit" id="cancelButton" value="Cancel"></div>`
+        <input type="text" id="projname" placeholder="Project Name"><input type="submit" id="okButton" value=""><input type="submit" id="cancelButton" value=""></div>`
         DOM.confirmNewProj();
         DOM.enterKeyInputField();
         DOM.cancelCreateProject();
