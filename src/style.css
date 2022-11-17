@@ -27,7 +27,7 @@
 
 
 body {
-  height: 100vh;
+  height: 100%;
   font-size: large;
   background-color:rgb(16, 82, 130);
   display: flex;
@@ -49,6 +49,7 @@ header {
   font: 6px;
   color: white;
   background-color: rgb(50, 50, 50);
+  border: 2px solid lightgray;
   border-radius: 2px;
   padding: 4px;
   height: 18px;
