@@ -43,6 +43,8 @@ body {
   border-radius: 2px;
   padding:2px;
   margin-bottom: 10vh;
+  margin-right: auto;
+  margin-top: 2px;
 }
 
 header {
@@ -51,9 +53,11 @@ header {
   background-color: rgb(50, 50, 50);
   border: 2px solid lightgray;
   border-radius: 2px;
-  padding: 4px;
+  padding: 5px;
   height: 18px;
-  margin: -5px;
+  margin-top: -5px;
+  margin-left: -5px;
+  margin-bottom: 5px;
 }
 
 #mainContainer>#nav{
