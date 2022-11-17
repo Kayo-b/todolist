@@ -22,12 +22,12 @@ export default class DOM {
         todoList = todoList.projects
         let projectsList = document.getElementById("projList");
         let showNameFunc = (item) => {
-        if(item.name != "Tasks due for today") {
+        if(item.name != "Due / Overdue Tasks") {
         projectsList.innerHTML += `
         <div id="${item.name}" class="projListingClass">${item.name}
         <div id="${item.name} edit" class="editButton"></div></div>`
     }
-        else if(item.name == "Tasks due for today"){
+        else if(item.name == "Due / Overdue Tasks"){
             projectsList.innerHTML += `
             <div id="${item.name}" class="projListingClass">${item.name}`
         }
@@ -42,9 +42,9 @@ export default class DOM {
         let projIndex = DOM.getIndexOfProject(projName);
         let projectTasks = todoList[projIndex].tasks;
         let projectList = document.getElementById("tasksList");
-        projectList.innerHTML = `${projName}<div id="tasks-menu">
+        projectList.innerHTML = `<div id="projNameOnTasks"><b>${projName}</b></div><div id="tasks-menu">
           </div>`
-        if(projName != "Tasks due for today"){
+        if(projName != "Due / Overdue Tasks"){
             projectList.insertAdjacentHTML("beforeend", `<button id="addtask"></button>`)    
         }
         
@@ -241,7 +241,7 @@ export default class DOM {
     static changeObjName(targetId, newName) {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
         var newObjProj = DOM.assignMethodsToProjectObj(targetId);
-        let todayObj = DOM.assignMethodsToProjectObj("Tasks due for today");
+        let todayObj = DOM.assignMethodsToProjectObj("Due / Overdue Tasks");
         console.log(todayObj)
         newObjProj.setName(newName)
         for(let x = 0; x < newObjProj.tasks.length; x++){
@@ -306,9 +306,9 @@ export default class DOM {
             let projObj = DOM.assignMethodsToProjectObj(e.target.className);
             let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);
             projObj.tasks[indexOfTask].setStatus(true)
-            //Checking tasks that are shared between target project and "Tasks due for today" projects
+            //Checking tasks that are shared between target project and "Due / Overdue Tasks" projects
             if(projObj.tasks[indexOfTask].note != ""){
-                if(projObj.name == "Tasks due for today"){
+                if(projObj.name == "Due / Overdue Tasks"){
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let projID = projObj.tasks[indexOfTask].note
                     let indexOfProj = DOM.getIndexOfProject(projID)
@@ -319,7 +319,7 @@ export default class DOM {
                 }
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let todayProj = todoList.projects[0]
-                    let todayTaskIndex = DOM.getIndexOfTask("Tasks due for today", e.target.id)
+                    let todayTaskIndex = DOM.getIndexOfTask("Due / Overdue Tasks", e.target.id)
                     todayProj.tasks[todayTaskIndex].setStatus(true)
                     DOM.substituteProjectFromTodoList(0, todayProj);
             }
@@ -342,8 +342,8 @@ export default class DOM {
             if(projObj.tasks[taskIndex].note != ""){
                 let todayArrIndex = DOM.getIndexOfTodayArrTask(projName, e.target.id);
                 projObj.deleteTodayArrTask(todayArrIndex);
-                //Deleting tasks that are shared between target project and "Tasks due for today" projects
-                if(projObj.name == "Tasks due for today"){
+                //Deleting tasks that are shared between target project and "Due / Overdue Tasks" projects
+                if(projObj.name == "Due / Overdue Tasks"){
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let projID = projObj.tasks[taskIndex].note
                     let indexOfProj = DOM.getIndexOfProject(projID)
@@ -354,7 +354,7 @@ export default class DOM {
                 }
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let todayProj = todoList.projects[0]
-                    let todayTaskIndex = DOM.getIndexOfTask("Tasks due for today", e.target.id)
+                    let todayTaskIndex = DOM.getIndexOfTask("Due / Overdue Tasks", e.target.id)
                     todayProj.deleteTask(todayTaskIndex)
                     DOM.substituteProjectFromTodoList(0, todayProj);
             }
@@ -501,7 +501,7 @@ export default class DOM {
         let clickOnProject = document.getElementById("projList")
         clickOnProject.addEventListener("click", (e) => {
             if(e.target.className != "projListingClass") return
-            if(e.target.id == "Tasks due for today"){
+            if(e.target.id == "Due / Overdue Tasks"){
                 DOM.showProjNameInTaskList(`${e.target.id}`)
                 DOM.openProject(e.target.id);
                 return

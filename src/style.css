@@ -1,49 +1,75 @@
-@font-face {
+/* @font-face {
     font-family: "MyWebFont";
     font-weight: 600;
     src: url("GemunuLibre-VariableFont_wght.ttf") format("woff2");
-  }
-  
+  } */
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  body {
+    background: #999;
+    width: 100%;
+  }
+}
+/* 
 .hello {
     color: red;
     font-family: "MyWebFont";
     font-size: xx-large;
     background: url('./icon.jpg');
   }
-
-
+ */
 .header {
-  align-items: center;;
+  align-items: center;
+  margin-right: auto;
+  margin-bottom: auto;
+  
 }
 
+
 body {
+  height: 100vh;
+  font-size: large;
   background-color:rgb(16, 82, 130);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
   align-items: center;
-  transform: scale(1.1);
+  transform: scale(1.0);
   transform-origin: 0 0;
 }
 #mainContainer{
   background-color: rgb(50, 50, 50);
   border-radius: 2px;
+  padding:2px;
+  margin-bottom: 10vh;
 }
 
 header {
-  border: 2px solid rgb(45, 45, 45);
+  font: 6px;
+  color: white;
+  background-color: rgb(50, 50, 50);
   border-radius: 2px;
-  padding: 5px
+  padding: 4px;
+  height: 18px;
+  margin: -5px;
 }
 
 #mainContainer>#nav{
-  height: 100%;
+  height: auto;
   width: auto;
   display:flex;
   border-top: 2px solid rgb(16, 82, 130);
+  border: 2px solid rgb(16, 82, 130);
   /* align-items: center; */
   justify-content:flex-start;
   flex-direction: row;
   color: lightgray
 
+}
+
+#mainContainer{
+  
 }
 
 #projectNameInTasks {
@@ -52,7 +78,6 @@ header {
 
 #tasks-menu, #projList {
   border-bottom: 2px solid rgb(16, 82, 130);
-  border-top: 2px solid rgb(16, 82, 130);
   width:auto;
   align-items: left;
   text-align: left;
@@ -66,9 +91,17 @@ header {
   justify-content:flex-start;
 }
 
-#projectsDiv, #tasksList {
-  
-  border-right: 2px solid rgb(16, 82, 130);
+#projectsTitle{
+  border-bottom: 2px solid rgb(16, 82, 130);
+  margin-bottom: 15px;
+}
+
+#projNameOnTasks {
+  border-bottom: 2px solid rgb(16, 82, 130);
+  margin-bottom: 15px;
+}
+#projectsDiv{
+  flex-grow: 0;
   height:800px;
   min-width: 150px;
   align-items: center;
@@ -77,6 +110,23 @@ header {
   flex-direction:column;
   justify-content: flex-start;
   padding: 10px;
+}
+
+#tasksList {
+  flex-grow: 3;
+  flex-direction: row;
+  height:800px;
+  min-width: 150px;
+  align-items: center;
+  text-align: center;
+  display:flex;
+  flex-direction:column;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+#projectsDiv {
+  border-right: 2px solid rgb(16, 82, 130);
 }
 
 h3 {
@@ -148,7 +198,8 @@ input[type="date"] {
     background-color: rgb(50, 50, 50);;
     color: rgb(115, 112, 112);
     size: 80px;
-    padding-right:-10px
+    padding-right:-10px;
+    margin-top: 3px;
     
 }
 
@@ -177,6 +228,7 @@ input[type="date"]:hover {
   border: 0px;
   cursor: pointer;
   filter: brightness(0) invert(0.7);
+  transform: scale(1.1);
 
 }
 
@@ -188,12 +240,13 @@ input[type="date"]:hover {
   border: 0px;
   cursor: pointer;
   filter: brightness(0) invert(0.7);
+  transform: scale(1.1);
   padding-top: -5px;
   margin: 3px;
 
 }
 #addproject:hover {
-  transform: scale(1.2);
+  transform: scale(1.3);
   filter: brightness(1) invert(1);
 }
 
@@ -208,15 +261,15 @@ input[type="date"]:hover {
 }
 
 .taskDeleteButton:hover {
-  transform: scale(1.10);
+  transform: scale(1.1);
   filter: brightness(1) invert(1);
 }
 
 #addTaskButton123:hover {
-  transform: scale(1.17);
+  transform: scale(1.2);
   filter: brightness(1) invert(1);
 }
-#cancelAddTask, #taskDeleteButton{
+#cancelAddTask {
   background: url(remove.svg);
   width: 20px;
   height: 20px;
@@ -225,11 +278,27 @@ input[type="date"]:hover {
   border: 0px;
   cursor: pointer;
   filter: brightness(0) invert(0.7);
-  transform: scale(1.16);
+  transform: scale(1.26);
+}
+
+.taskDeleteButton {
+  background: url(remove.svg);
+  width: 17px;
+  height: 17px;
+  background-size: 17px 17px;
+  border: 0px;
+  cursor: pointer;
+  filter: brightness(0) invert(0.7);
+  transform: scale(0.85);
+  padding-top: 5px;
+}
+
+#tasks-menu > .taskDeleteButton {
+  margin-left: auto;
 }
 
 #cancelAddTask:hover {
-  transform: scale(1.33);
+  transform: scale(1.36);
   filter: brightness(1) invert(1);
 }
 
@@ -242,13 +311,13 @@ input[type="date"]:hover {
   border: 0px;
   cursor: pointer;
   filter: brightness(0) invert(0.7);
-  transform: scale(1.16);
+  transform: scale(1.27);
   padding-top: -5px;
   margin: 3px;
 }
 
 #cancelButton:hover {
-  transform: scale(1.33);
+  transform: scale(1.37);
   filter: brightness(1) invert(1);
 }
 
@@ -323,4 +392,13 @@ input[type="text"]::placeholder {
 input[type="checkbox"] {
   background-color: rgb(16, 82, 130);
   border: 0px
+}
+
+.projListingClassMain, #tasks-menu {
+  margin-bottom:5px;
+}
+
+s {
+  margin-left: 4px;
+  margin-top: 4px;
 }
