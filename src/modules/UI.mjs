@@ -24,12 +24,12 @@ export default class DOM {
         let showNameFunc = (item) => {
         if(item.name != "Due / Overdue Tasks") {
         projectsList.innerHTML += `
-        <div id="${item.name}" class="projListingClass">${item.name}
+        <div id="${item.name}" class="projListingClass" style="border-bottom: 2px solid transparent">${item.name}
         <div id="${item.name} edit" class="editButton"></div></div>`
     }
         else if(item.name == "Due / Overdue Tasks"){
             projectsList.innerHTML += `
-            <div id="${item.name}" class="projListingClass">${item.name}`
+            <div id="${item.name}" class="projListingClass" style="border-bottom: 2px solid transparent">${item.name}`
         }
     }
         todoList.forEach(showNameFunc)
@@ -87,6 +87,8 @@ export default class DOM {
     //Create Content
 
     static openProject(projName) {
+        let projectElement = document.getElementById(projName);
+        projectElement.style = "border-bottom: 2px solid transparent;";
         DOM.loadTaskList(projName);
     }
 
@@ -502,14 +504,24 @@ export default class DOM {
         clickOnProject.addEventListener("click", (e) => {
             if(e.target.className != "projListingClass") return
             if(e.target.id == "Due / Overdue Tasks"){
+                DOM.removeBottomBorder(clickOnProject);
                 DOM.showProjNameInTaskList(`${e.target.id}`)
                 DOM.openProject(e.target.id);
+                e.target.style = "border-bottom: 2px solid rgb(16, 82, 130);"
                 return
             }
+            DOM.removeBottomBorder(clickOnProject);
             DOM.showProjNameInTaskList(`${e.target.id}`)
             DOM.openProject(e.target.id);
+            e.target.style = "border-bottom: 2px solid rgb(16, 82, 130);"
             DOM.createTaskButton(e.target.id);
             });
+    }
+
+    static removeBottomBorder(clickOnProject) {
+        let array = []
+        for(let x = 0; x < clickOnProject.children.length; x++) array.push(clickOnProject.children[x]);
+        array.forEach((item) => item.style = "border-bottom: 2px solid transparent;");
     }
 
     static addTaskButton() {

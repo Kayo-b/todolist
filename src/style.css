@@ -1,8 +1,14 @@
-/* @font-face {
+@font-face {
     font-family: "MyWebFont";
     font-weight: 600;
     src: url("GemunuLibre-VariableFont_wght.ttf") format("woff2");
-  } */
+  }
+
+  @font-face {
+    font-family: "MyWebFont2";
+    font-weight: 600;
+    src: url("UbuntuCondensed-Regular.ttf") format("woff2");
+  }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
   body {
@@ -18,6 +24,7 @@
     background: url('./icon.jpg');
   }
  */
+
 .header {
   align-items: center;
   margin-right: auto;
@@ -27,6 +34,7 @@
 
 
 body {
+  font-family: "MyWebFont2";
   height: 100%;
   font-size: large;
   background-color:rgb(16, 82, 130);
@@ -51,13 +59,14 @@ header {
   font: 6px;
   color: white;
   background-color: rgb(50, 50, 50);
-  border: 2px solid lightgray;
+  border: 2px solid rgb(16, 82, 130);
   border-radius: 2px;
   padding: 5px;
   height: 18px;
-  margin-top: -5px;
-  margin-left: -5px;
+  margin-top: -10px;
+  margin-left: -10px;
   margin-bottom: 5px;
+  font-family: "MyWebFont";
 }
 
 #mainContainer>#nav{
@@ -82,7 +91,7 @@ header {
 }
 
 #tasks-menu, #projList {
-  border-bottom: 2px solid rgb(16, 82, 130);
+  /*border-bottom: 2px solid rgb(16, 82, 130);*/
   width:auto;
   align-items: left;
   text-align: left;

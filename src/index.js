@@ -4,6 +4,8 @@ import Icon from './icon.jpg';
 import Data from './data.xml';
 import Notes from './data.csv';
 import DOM from './modules/UI.mjs';
+import './style.scss';
+
 
 function component() {
     const element = document.createElement('div');
