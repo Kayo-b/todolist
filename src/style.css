@@ -4,11 +4,11 @@
     src: url("GemunuLibre-VariableFont_wght.ttf") format("woff2");
   }
 
-  @font-face {
-    font-family: "MyWebFont2";
-    font-weight: 600;
-    src: url("UbuntuCondensed-Regular.ttf") format("woff2");
-  }
+@font-face {
+  font-family: "MyWebFont2";
+  font-weight: 600;
+  src: url("UbuntuCondensed-Regular.ttf") format("woff2");
+}
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
   body {
@@ -16,19 +16,10 @@
     width: 100%;
   }
 }
-/* 
-.hello {
-    color: red;
-    font-family: "MyWebFont";
-    font-size: xx-large;
-    background: url('./icon.jpg');
-  }
- */
 
 .header {
   align-items: center;
   margin-right: auto;
-  margin-bottom: auto;
   
 }
 
@@ -37,13 +28,13 @@ body {
   font-family: "MyWebFont2";
   height: 100%;
   font-size: large;
-  background-color:rgb(16, 82, 130);
+  background-color:#0d4268;
   display: flex;
   justify-content: center;
   flex-direction: column;
   text-align: center;
   align-items: center;
-  transform: scale(1.0);
+  transform: scale(1.1);
   transform-origin: 0 0;
 }
 #mainContainer{
@@ -59,7 +50,7 @@ header {
   font: 6px;
   color: white;
   background-color: rgb(50, 50, 50);
-  border: 2px solid rgb(16, 82, 130);
+  border: 2px solid #1777bc;
   border-radius: 2px;
   padding: 5px;
   height: 18px;
@@ -73,8 +64,8 @@ header {
   height: auto;
   width: auto;
   display:flex;
-  border-top: 2px solid rgb(16, 82, 130);
-  border: 2px solid rgb(16, 82, 130);
+  border-top: 2px solid #1777bc;
+  border: 2px solid #1777bc;
   /* align-items: center; */
   justify-content:flex-start;
   flex-direction: row;
@@ -87,7 +78,7 @@ header {
 }
 
 #projectNameInTasks {
-  border-bottom: 2px solid rgb(16, 82, 130);
+  border-bottom: 2px solid #1777bc;
 }
 
 #tasks-menu, #projList {
@@ -98,6 +89,7 @@ header {
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
+  min-width: 150px;
 }
 
 #tasksInputField {
@@ -106,12 +98,12 @@ header {
 }
 
 #projectsTitle{
-  border-bottom: 2px solid rgb(16, 82, 130);
+  border-bottom: 2px solid #1777bc;
   margin-bottom: 15px;
 }
 
 #projNameOnTasks {
-  border-bottom: 2px solid rgb(16, 82, 130);
+  border-bottom: 2px solid #1777bc;
   margin-bottom: 15px;
 }
 #projectsDiv{
@@ -140,7 +132,7 @@ header {
 }
 
 #projectsDiv {
-  border-right: 2px solid rgb(16, 82, 130);
+  border-right: 2px solid #1777bc;
 }
 
 h3 {
@@ -213,7 +205,7 @@ input[type="date"] {
     color: rgb(115, 112, 112);
     size: 80px;
     padding-right:-10px;
-    margin-top: 3px;
+    margin-top: 1px;
     
 }
 
@@ -224,6 +216,7 @@ input[type="date"]:hover {
 }
 
 #taskList {
+  margin-top: 2px;
   display: flex;
   width: auto;
 }
@@ -392,7 +385,7 @@ input[type="text"] {
   width: 80px;
   border-style:none;
   border-radius: 2px;
-  background-color:  rgb(16, 82, 130);
+  background-color:  #0d4268;
   font: 13px sans-serif;
   margin: 2px;
   
@@ -404,7 +397,7 @@ input[type="text"]::placeholder {
 }
 
 input[type="checkbox"] {
-  background-color: rgb(16, 82, 130);
+  background-color: #1777bc;
   border: 0px
 }
 
@@ -412,7 +405,7 @@ input[type="checkbox"] {
   margin-bottom:5px;
 }
 
-s {
+/* s {
   margin-left: 4px;
   margin-top: 4px;
-}
+} */

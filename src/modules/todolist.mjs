@@ -41,14 +41,3 @@ export default class TodoList {
 
 }
 
-
-// var test = new TodoList
-// test.addProject(createProject("NAME!", "DESC#"));
-// var newProj = test.projects[1]
-// newProj.setTask("nameTask", "07/08/2022")
-// newProj.setTask("nameTask-2", "07/08/2022")
-// newProj.isToday()
-// test.todayTask()
-// console.log(test.projects[1])
-// console.log(test.projects[0].tasks)
-

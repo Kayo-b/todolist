@@ -42,7 +42,7 @@ export default class DOM {
         let projIndex = DOM.getIndexOfProject(projName);
         let projectTasks = todoList[projIndex].tasks;
         let projectList = document.getElementById("tasksList");
-        projectList.innerHTML = `<div id="projNameOnTasks"><b>${projName}</b></div><div id="tasks-menu">
+        projectList.innerHTML = `<div id="projNameOnTasks" class="${projName}"><b>${projName}</b></div><div id="tasks-menu">
           </div>`
         if(projName != "Due / Overdue Tasks"){
             projectList.insertAdjacentHTML("beforeend", `<button id="addtask"></button>`)    
@@ -159,8 +159,6 @@ export default class DOM {
         }
         else if(hide == "no") {
             target.style.display = "block";
-            console.log("teste hide button")
-            console.log(target.style.display)
         }
     }
 
@@ -208,6 +206,7 @@ export default class DOM {
         DOM.showProjNameInTaskList(`${projName}`);
         DOM.openProject(projName);
         DOM.taskInput(projName);   
+        DOM.addBottomBorder(projName);
 
     }
 
@@ -215,11 +214,6 @@ export default class DOM {
         let okButton = document.getElementById("okButton");
         okButton.addEventListener("click", DOM.createProjObject);
     }
-
-    // static confirmNewProjEnterKey(e) {
-    //     console.log(e.key)
-    //     if(e.key === "Enter") DOM.createProjObject()
-    // }
 
     static getIndexOfProject(projID) {
         var getTodoList = Storage.getTodoList();
@@ -244,7 +238,6 @@ export default class DOM {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
         var newObjProj = DOM.assignMethodsToProjectObj(targetId);
         let todayObj = DOM.assignMethodsToProjectObj("Due / Overdue Tasks");
-        console.log(todayObj)
         newObjProj.setName(newName)
         for(let x = 0; x < newObjProj.tasks.length; x++){
             newObjProj.tasks[x].setNote(newName)
@@ -267,8 +260,6 @@ export default class DOM {
 
     //Action that occurs after the "Add" button is pressed
     static addTask(objId, taskName) {
-        console.log("OBJ NAME FROM ADD TASK")
-        console.log(objId)
         if(taskName == "") return alert("please insert a task name");
         else if(DOM.getIndexOfTask(objId, taskName) >= 0) return alert("task already listed");
 
@@ -284,9 +275,11 @@ export default class DOM {
         DOM.hideButton("addtask", "no");
         DOM.openProject(objId)
         DOM.createTaskButton(objId); 
-        
+        DOM.addBottomBorder(objId);
 
     }
+
+
 
     static setTaskDate(projId, taskId, input) {
         let projIndex = DOM.getIndexOfProject(projId)
@@ -309,7 +302,7 @@ export default class DOM {
             let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);
             projObj.tasks[indexOfTask].setStatus(true)
             //Checking tasks that are shared between target project and "Due / Overdue Tasks" projects
-            if(projObj.tasks[indexOfTask].note != ""){
+            if(projObj.tasks[indexOfTask].note != "" && DOM.checkIfTaskIsInDue(e.target.id) == true){
                 if(projObj.name == "Due / Overdue Tasks"){
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let projID = projObj.tasks[indexOfTask].note
@@ -331,6 +324,19 @@ export default class DOM {
             DOM.createTaskButton(e.target.className);
             
         })
+    }
+
+    static checkIfTaskIsInDue(taskName) {
+        let todoList = Storage.addMethodsToProjectsInTodoList();
+        let dueTasks = todoList.projects[0].tasks;
+        let result = null;
+        dueTasks.forEach((item) => {
+            if(item.name == taskName) {
+                result = true;
+            } else
+                result = false;
+            })
+            return result
     }
 
     static deleteTaskButton() {
@@ -460,6 +466,14 @@ export default class DOM {
 
 
     static deleteProjectObj(projId) {
+        let checkCurrentOpenProj = document.getElementById("projNameOnTasks");
+        let tasksMenuElem = document.getElementById("tasks-menu");
+        let addTaskButtonElem = document.getElementById("addtask");
+        if(checkCurrentOpenProj.className == projId){
+            checkCurrentOpenProj.remove();
+            tasksMenuElem.remove();
+            addTaskButtonElem.remove();
+        }
         var projIndex = DOM.getIndexOfProject(projId)
         DOM.delAllTasks(projId)
         Storage.deleteProject(projIndex);
@@ -507,15 +521,21 @@ export default class DOM {
                 DOM.removeBottomBorder(clickOnProject);
                 DOM.showProjNameInTaskList(`${e.target.id}`)
                 DOM.openProject(e.target.id);
-                e.target.style = "border-bottom: 2px solid rgb(16, 82, 130);"
+                DOM.addBottomBorder(e.target.id)
+                //e.target.style = "border-bottom: 2px solid #1777bc;";
                 return
             }
             DOM.removeBottomBorder(clickOnProject);
             DOM.showProjNameInTaskList(`${e.target.id}`)
             DOM.openProject(e.target.id);
-            e.target.style = "border-bottom: 2px solid rgb(16, 82, 130);"
+            DOM.addBottomBorder(e.target.id)
             DOM.createTaskButton(e.target.id);
             });
+    }
+
+    static addBottomBorder(projectId) {
+        let projectElem = document.getElementById(projectId);
+        projectElem.style = "border-bottom: 2px solid #1777bc;"
     }
 
     static removeBottomBorder(clickOnProject) {
@@ -540,7 +560,7 @@ export default class DOM {
     static taskInputButtonEnterKey(e, projectName, inputValue) {
         let taskInputField = document.getElementById("tasksInputField");
         if(e.key === "Enter") DOM.addTask(projectName, inputValue)
-        else if(e.key === "Escape") console.log("TESTE ESC");
+        else if(e.key === "Escape");
         
     }
     static createTaskButton(projName) {
