@@ -14,6 +14,7 @@
   body {
     background: #999;
     width: 100%;
+    font-size: 1.2vw;
   }
 }
 
@@ -27,7 +28,7 @@
 body {
   font-family: "MyWebFont2";
   height: 100%;
-  font-size: large;
+  font-size: larger;
   background-color:#0d4268;
   display: flex;
   justify-content: center;
@@ -52,7 +53,9 @@ header {
   background-color: rgb(50, 50, 50);
   border: 2px solid #1777bc;
   border-radius: 2px;
-  padding: 5px;
+  padding-bottom: 3px;
+  padding-right:3px;
+  padding-left:3px;
   height: 18px;
   margin-top: -10px;
   margin-left: -10px;
@@ -71,10 +74,6 @@ header {
   flex-direction: row;
   color: lightgray
 
-}
-
-#mainContainer{
-  
 }
 
 #projectNameInTasks {
