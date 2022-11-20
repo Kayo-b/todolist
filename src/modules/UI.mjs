@@ -63,7 +63,7 @@ export default class DOM {
             if(item.dueDate != null && item.done == false)
                 tasksMenu.innerHTML += `
                 <div id="taskList"><input id="${item.name}" class="${projName}" type="checkbox">${item.name}
-                <input type="date" id="${item.name}" class="${projName}" value="${item.dueDate}" min="2018-01-01" max="2030-12-31">`    
+                <input type="date" id="${item.name}" class="${projName}" value="${item.dueDate}" min="2018-01-01" max="2030-12-31" readonly="">`
             }
         projectTasks.forEach(showTasks);
         DOM.taskCheck();
@@ -434,36 +434,7 @@ export default class DOM {
 
         return getValue
     }
-
-    static returnParentNodeValue(elemId) {
-        let getValue = function() {
-            var getElement = document.getElementById(elemId)
-            var returnValue = getElement.parentNode.id;
-            return returnValue
-        }
-
-        return getValue
-    }
-
-    static returnParentNodeClass(elemId) {
-        let getValue = () => {
-            var getElement = document.getElementById(elemId)
-            let returnValue = getElement.parentNode;
-            return returnValue
-        }
-
-        return getValue
-    }
-
-    static returnChildNodeId(elemId) {
-        let getValue = () => {
-            let returnValue = elemId.childNodes[1].id
-            return returnValue
-        }
-
-        return getValue
-    }
-
+    
 
     static deleteProjectObj(projId) {
         let checkCurrentOpenProj = document.getElementById("projNameOnTasks");
@@ -491,6 +462,7 @@ export default class DOM {
         }
         DOM.substituteProjectFromTodoList(0, todayProj)
     }
+
     //Deletes second simbling = removes project from list and from localStorage
     static deleteProjectButton() {
         var deleteButtonTeste = document.getElementById("delButtonTeste");
@@ -522,7 +494,7 @@ export default class DOM {
                 DOM.showProjNameInTaskList(`${e.target.id}`)
                 DOM.openProject(e.target.id);
                 DOM.addBottomBorder(e.target.id)
-                //e.target.style = "border-bottom: 2px solid #1777bc;";
+
                 return
             }
             DOM.removeBottomBorder(clickOnProject);
@@ -576,7 +548,7 @@ export default class DOM {
             let taskId = e.target.id
             if(e.target.type == "date" && e.target.value == "") return;
             if(e.target.type != "date") return;
-            e.target.innerHTML = "readonly"
+            e.target.readOnly = "true"
             DOM.setTaskDate(projId, taskId, input);
         })
     }
