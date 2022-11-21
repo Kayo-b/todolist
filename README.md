@@ -10,5 +10,5 @@
  
 ### Technical notes about project development:
 Project was done with the main objective of simultaniously using modules, classes, factory functions, localStorage all running through webpack. The project and tasks objects each have their own factory function module that inherits _proto_ methods so that each project/task doesn't have to generate the same new methods upon creation.
-All other modules(UI, todoList, storage) have been created in a class structure, each linked to another in a chain-like manner(not shure if this was a good approach) towards the end-point UI module where the classes are invoked through the eventListeners and numerous other auxiliary functions.
+All other modules(UI, todoList, storage) have been created in a class structure, each linked to another in a chain-like manner(not sure if this was a good approach) ending in the UI module where the classes are invoked through the eventListeners and numerous other auxiliary functions.
 
