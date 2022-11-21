@@ -12,4 +12,4 @@
 Project was done with the main objective of simultaniously using modules, classes, factory functions, localStorage all running through webpack. The project and tasks objects each have their own factory function module that inherits _proto_ methods so that each project/task doesn't have to generate the same new methods upon creation.
 All other modules(UI, todoList, storage) have been created in a class structure, each linked to another in a chain-like manner(not sure if this was a good approach) ending in the UI module where the classes are invoked through the eventListeners and numerous other auxiliary functions.
 
-![Recording 2022-11-21 at 14 03 23](https://user-images.githubusercontent.com/93148601/203074863-a9901f87-f7a2-4ea6-bcb0-8b922bbeb1f0.gif)
+![Recording 2022-11-21 at 14 06 00](https://user-images.githubusercontent.com/93148601/203075376-8fb5f1b5-9883-4c13-8c73-97ccfe32825d.gif)
