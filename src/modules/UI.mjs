@@ -238,9 +238,11 @@ export default class DOM {
         var indexOfTargetId = DOM.getIndexOfProject(targetId)
         var newObjProj = DOM.assignMethodsToProjectObj(targetId);
         let todayObj = DOM.assignMethodsToProjectObj("Due / Overdue Tasks");
+        console.log(todayObj.tasks.length);
         newObjProj.setName(newName)
         for(let x = 0; x < newObjProj.tasks.length; x++){
             newObjProj.tasks[x].setNote(newName)
+            console.log(todayObj.tasks.length)
             if(todayObj.tasks.length > 0){
                 if(todayObj.tasks[x].note == targetId){
                     todayObj.tasks[x].setNote(newName)
@@ -258,7 +260,7 @@ export default class DOM {
 
 
 
-    //Action that occurs after the "Add" button is pressed
+    //Action that occurs after the add task button is pressed
     static addTask(objId, taskName) {
         if(taskName == "") return alert("please insert a task name");
         else if(DOM.getIndexOfTask(objId, taskName) >= 0) return alert("task already listed");
@@ -322,6 +324,8 @@ export default class DOM {
             DOM.removeInnerHTML("tasks-menu");
             DOM.loadTaskList(e.target.className);
             DOM.createTaskButton(e.target.className);
+
+
             
         })
     }
@@ -536,6 +540,7 @@ export default class DOM {
         
     }
     static createTaskButton(projName) {
+        if(projName === "Due / Overdue Tasks") return
         var createButton = document.getElementById("addtask");
         createButton.addEventListener("click", () => DOM.taskInput(projName))
     }

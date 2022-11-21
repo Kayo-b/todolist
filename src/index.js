@@ -20,11 +20,7 @@ function component() {
 
     myIcon.src = Icon;
   
-  
     element.appendChild(myIcon);
-    console.log(Data);
-
-    console.log(Notes);
 
     var loadContent = DOM.loadTodoList();
     DOM.loadContent()

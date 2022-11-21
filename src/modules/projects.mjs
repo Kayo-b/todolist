@@ -15,8 +15,8 @@ function protoMethods() {
         deleteTodayArrTask(taskIndex){this.todayArr.splice(taskIndex,1)},
         deleteAllTasks(){this.tasks = []},
         isToday(taskIndex) {
-            //for(let x = 0; x < this.tasks.length; x++) { 
-                if(this.tasks[taskIndex].dueDate === today && this.tasks[taskIndex].note == "") {
+                if(this.tasks[taskIndex].dueDate === today && this.tasks[taskIndex].priority == null) {
+                    this.tasks[taskIndex].setPriority("high");
                     this.tasks[taskIndex].setNote(`${this.name}`);
                     this.todayArr.push(this.tasks[taskIndex]);
                     let todoList = Storage.getTodoList();
@@ -33,7 +33,6 @@ export default function createProject(name, desc) {
         description: desc,
         tasks: [],
         todayArr:[],
-        //methodTest(input){console.log("method test" + `${input}`)},
         __proto__: protoMethods()
 
     }
