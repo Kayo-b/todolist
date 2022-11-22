@@ -29,7 +29,7 @@ export default class DOM {
     }
         else if(item.name == "Due / Overdue Tasks"){
             projectsList.innerHTML += `
-            <div id="${item.name}" class="projListingClass" style="border-bottom: 2px solid transparent">${item.name}`
+            <div id="${item.name}" class="DueTasks" style="border-bottom: 2px solid transparent">${item.name}`
         }
     }
         todoList.forEach(showNameFunc)
@@ -311,15 +311,19 @@ export default class DOM {
                     let indexOfProj = DOM.getIndexOfProject(projID)
                     let originProj = todoList.projects[indexOfProj]
                     let originTaskIndex = DOM.getIndexOfTask(projID, e.target.id)
+                    console.log("MARK***1")
+                    console.log(originProj.tasks[originTaskIndex])
                     originProj.tasks[originTaskIndex].setStatus(true)
                     DOM.substituteProjectFromTodoList(indexOfProj, originProj);
                 }
+                else     
+                    console.log("MARK***2")
                     let todoList = Storage.addMethodsToProjectsInTodoList();
                     let todayProj = todoList.projects[0]
                     let todayTaskIndex = DOM.getIndexOfTask("Due / Overdue Tasks", e.target.id)
                     todayProj.tasks[todayTaskIndex].setStatus(true)
                     DOM.substituteProjectFromTodoList(0, todayProj);
-            }
+            };
             DOM.substituteProjectFromTodoList(projIndex, projObj);
             DOM.removeInnerHTML("tasks-menu");
             DOM.loadTaskList(e.target.className);
@@ -327,8 +331,8 @@ export default class DOM {
 
 
             
-        })
-    }
+        });
+    };
 
     static checkIfTaskIsInDue(taskName) {
         let todoList = Storage.addMethodsToProjectsInTodoList();
@@ -339,9 +343,9 @@ export default class DOM {
                 result = true;
             } else
                 result = false;
-            })
+            });
             return result
-    }
+    };
 
     static deleteTaskButton() {
         let deleteTask = document.getElementById("tasks-menu")
@@ -371,9 +375,9 @@ export default class DOM {
                     DOM.substituteProjectFromTodoList(0, todayProj);
             }
             projObj.deleteTask(taskIndex);
-            e.target.parentNode.remove()
+            e.target.parentNode.remove();
             DOM.substituteProjectFromTodoList(objectIndex, projObj);
-            DOM.loadTaskList(projName)
+            DOM.loadTaskList(projName);
             DOM.createTaskButton(projName);
             
         })
@@ -384,7 +388,7 @@ export default class DOM {
     /*Reads the new input value and sends it with the old input value to editProject function*/
     static confirmUpdateProj(oldValue) {
         var okEditButton = document.getElementById("okEditButton");
-        let newValue = DOM.returnPrevElemSiblingValue(okEditButton)
+        let newValue = DOM.returnPrevElemSiblingValue(okEditButton);
         
         DOM.deleteProjectButton();  
         okEditButton.addEventListener("click", function() { DOM.changeObjName(oldValue, newValue())});
@@ -492,7 +496,7 @@ export default class DOM {
         let taskListValue = document.getElementById("tasksList")
         let clickOnProject = document.getElementById("projList")
         clickOnProject.addEventListener("click", (e) => {
-            if(e.target.className != "projListingClass") return
+            if(e.target.className != "projListingClass" && e.target.className != "DueTasks") return
             if(e.target.id == "Due / Overdue Tasks"){
                 DOM.removeBottomBorder(clickOnProject);
                 DOM.showProjNameInTaskList(`${e.target.id}`)

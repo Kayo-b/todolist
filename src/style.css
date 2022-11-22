@@ -157,7 +157,7 @@ h3 {
   width:30px;
 }
 
-.projListingClass{
+.projListingClass, .DueTasks{
   border-radius: 1px;
   border: 1px solid transparent;
   display: flex;
@@ -172,6 +172,13 @@ h3 {
   
 }
 
+.DueTasks:hover{
+  background-color: rgb(80, 80, 80);;
+  cursor: pointer;
+  
+}
+
+
 .editButton{
   width: 17px;
   height: 17px;
@@ -182,6 +189,16 @@ h3 {
 
 
 .projListingClass:hover .editButton{
+  background: url(edit.svg);
+  width: 17px;
+  height: 17px;
+  background-size: 17px 17px;
+  margin-top:2px;
+  margin-left: 6px;
+  filter:invert(1)
+}
+
+.DueTasks:hover .editButton{
   background: url(edit.svg);
   width: 17px;
   height: 17px;
@@ -408,3 +425,8 @@ input[type="checkbox"] {
   margin-left: 4px;
   margin-top: 4px;
 } */
+
+.DueTasks {
+  text-shadow: 2px 2px black;
+  color: #1777bc;
+}
