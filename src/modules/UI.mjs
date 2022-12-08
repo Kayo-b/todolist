@@ -172,6 +172,7 @@ export default class DOM {
         <input type="text" id="${targetId}" placeholder="Project Name" value="${targetId}">
         <input type="submit" id="okEditButton" value="">
         <input type="submit" id="delButtonTeste" value=""></div>`;
+        console.log(targetId)
     DOM.confirmUpdateProj(targetId);
   }
 
@@ -242,11 +243,15 @@ export default class DOM {
     var newObjProj = DOM.assignMethodsToProjectObj(targetId);
     let todayObj = DOM.assignMethodsToProjectObj("Due / Overdue Tasks");
     newObjProj.setName(newName);
+    console.log(todayObj.tasks.length);
     for (let x = 0; x < newObjProj.tasks.length; x++) {
       newObjProj.tasks[x].setNote(newName);
       if (todayObj.tasks.length > 0) {
-        if (todayObj.tasks[x].note == targetId) {
-          todayObj.tasks[x].setNote(newName);
+        console.log(todayObj);
+        for(let y  = 0; y < todayObj.tasks.length; y++){
+          if (todayObj.tasks[y].note == targetId) {
+            todayObj.tasks[y].setNote(newName);
+          }
         }
       }
     }
@@ -296,6 +301,7 @@ export default class DOM {
       if (e.target.type != "checkbox") return;
       let projIndex = DOM.getIndexOfProject(e.target.className);
       let projObj = DOM.assignMethodsToProjectObj(e.target.className);
+      console.log(projObj)
       let indexOfTask = DOM.getIndexOfTask(e.target.className, e.target.id);
       projObj.tasks[indexOfTask].setStatus(true);
       //Checking tasks that are shared between target project and "Due / Overdue Tasks" projects
@@ -387,6 +393,7 @@ export default class DOM {
 
     DOM.deleteProjectButton();
     okEditButton.addEventListener("click", function () {
+      console.log(oldValue)
       DOM.changeObjName(oldValue, newValue());
     });
   }
