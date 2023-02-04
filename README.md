@@ -1,5 +1,5 @@
 # todo list
-## To-do list using js, css and html through webpack for learning purposes.
+### To-do list using js, css and html through webpack for learning purposes.
 
 ### Features: 
  - Create and edit projects;
